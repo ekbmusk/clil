@@ -11,7 +11,14 @@ import FeedbackPanel from '../../components/ui/FeedbackPanel';
 import TaskRenderer, { isAnswerValid } from '../../components/tasks/TaskRenderer';
 import { useLessonStore } from '../../store/lessonStore';
 import { useUserStore } from '../../store/userStore';
-import { mainButton, backButton, confirm as tgConfirm } from '../../lib/telegram';
+import {
+  mainButton,
+  backButton,
+  confirm as tgConfirm,
+  isTelegramWebApp,
+} from '../../lib/telegram';
+
+const HAS_NATIVE_BUTTONS = isTelegramWebApp();
 
 function haptic(kind) {
   try {
@@ -309,7 +316,12 @@ export default function LessonPlayer() {
     const showReplay = wrongCount > 0 && !wasReplayRef.current;
 
     return (
-      <div className="container-app flex min-h-[80vh] flex-col items-stretch space-y-6 py-6 pb-32">
+      <div
+        className={
+          'container-app flex min-h-[80vh] flex-col items-stretch space-y-6 py-6 ' +
+          (HAS_NATIVE_BUTTONS ? 'pb-8' : 'pb-32')
+        }
+      >
         <div className="text-center">
           <div className="text-5xl">{headline.emoji}</div>
           <h2 className="mt-2 text-2xl font-bold text-ink">{headline.text}</h2>
@@ -370,42 +382,44 @@ export default function LessonPlayer() {
           </ul>
         </div>
 
-        <div className="sticky bottom-0 -mx-4 mt-auto space-y-2 border-t border-border bg-bg/95 px-4 pb-4 pt-3 backdrop-blur">
-          {showReplay ? (
+        {!HAS_NATIVE_BUTTONS && (
+          <div className="sticky bottom-0 -mx-4 mt-auto space-y-2 border-t border-border bg-bg/95 px-4 pb-4 pt-3 backdrop-blur">
+            {showReplay ? (
+              <Button
+                size="lg"
+                className="w-full"
+                onClick={replayWrong}
+              >
+                Қателерді қайталау ({wrongCount})
+              </Button>
+            ) : hasNextLesson ? (
+              <Button
+                size="lg"
+                variant="success"
+                className="w-full"
+                onClick={goToNextLesson}
+              >
+                Келесі сабақ →
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="w-full"
+                onClick={() => navigate('/')}
+              >
+                Сабақтарға қайту
+              </Button>
+            )}
             <Button
-              size="lg"
-              className="w-full"
-              onClick={replayWrong}
-            >
-              Қателерді қайталау ({wrongCount})
-            </Button>
-          ) : hasNextLesson ? (
-            <Button
-              size="lg"
-              variant="success"
-              className="w-full"
-              onClick={goToNextLesson}
-            >
-              Келесі сабақ →
-            </Button>
-          ) : (
-            <Button
-              size="lg"
+              size="md"
+              variant="ghost"
               className="w-full"
               onClick={() => navigate('/')}
             >
-              Сабақтарға қайту
+              Сабақтар тізімі
             </Button>
-          )}
-          <Button
-            size="md"
-            variant="ghost"
-            className="w-full"
-            onClick={() => navigate('/')}
-          >
-            Сабақтар тізімі
-          </Button>
-        </div>
+          </div>
+        )}
 
         {/* Streak +1 toast */}
         {streakDelta > 0 && (
@@ -420,7 +434,12 @@ export default function LessonPlayer() {
   // Active task screen
   const totalActive = activeTasks.length;
   return (
-    <div className="container-app flex min-h-[calc(100vh-4rem)] flex-col py-4 pb-32">
+    <div
+      className={
+        'container-app flex min-h-[calc(100vh-4rem)] flex-col py-4 ' +
+        (HAS_NATIVE_BUTTONS ? 'pb-8' : 'pb-32')
+      }
+    >
       {/* Header / progress */}
       <div className="mb-4 space-y-2">
         <div className="flex items-center justify-between">
@@ -472,28 +491,32 @@ export default function LessonPlayer() {
         </div>
       )}
 
-      {/* Footer action */}
-      <div className="sticky bottom-0 left-0 right-0 mt-6 -mx-4 border-t border-border bg-bg/95 px-4 pb-4 pt-3 backdrop-blur">
-        {!result ? (
-          <Button
-            size="lg"
-            className="w-full"
-            disabled={!canCheck}
-            onClick={onSubmit}
-          >
-            {submitting ? 'Тексеру…' : 'Тексеру'}
-          </Button>
-        ) : (
-          <Button
-            size="lg"
-            variant={result.is_correct ? 'success' : 'primary'}
-            className="w-full"
-            onClick={onContinue}
-          >
-            {isLast ? 'Қорытынды' : 'Жалғастыру'}
-          </Button>
-        )}
-      </div>
+      {/* Footer action — hidden when Telegram's native MainButton is rendering
+          its own one. Outside Telegram (regular browser preview) we keep
+          this inline button so the flow stays usable. */}
+      {!HAS_NATIVE_BUTTONS && (
+        <div className="sticky bottom-0 left-0 right-0 mt-6 -mx-4 border-t border-border bg-bg/95 px-4 pb-4 pt-3 backdrop-blur">
+          {!result ? (
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={!canCheck}
+              onClick={onSubmit}
+            >
+              {submitting ? 'Тексеру…' : 'Тексеру'}
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              variant={result.is_correct ? 'success' : 'primary'}
+              className="w-full"
+              onClick={onContinue}
+            >
+              {isLast ? 'Қорытынды' : 'Жалғастыру'}
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,15 @@ function wa() {
   return typeof window !== 'undefined' ? window.Telegram?.WebApp : null;
 }
 
+export function isTelegramWebApp() {
+  // Only "real" Telegram WebApp launches have initData populated. The SDK
+  // script is bundled into Telegram itself; outside (e.g. opened in a regular
+  // browser tab) the object may exist but `initData` is an empty string and
+  // MainButton clicks won't be wired natively.
+  const w = wa();
+  return !!(w && (w.initData || w.initDataUnsafe?.user));
+}
+
 let mbHandler = null;
 let bbHandler = null;
 
