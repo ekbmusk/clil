@@ -12,22 +12,32 @@ const REGISTRY = {
   ordering: Ordering,
 };
 
+// Backend ships type-specific fields nested under `task.payload` (prompt,
+// options, items, correct_answers, etc.). Renderers expect them flat, so we
+// merge payload onto task before handing it off.
+function flatten(task) {
+  if (!task) return task;
+  return { ...(task.payload || {}), ...task };
+}
+
 export function isAnswerValid(task, value) {
-  const Comp = REGISTRY[task?.type];
+  const flat = flatten(task);
+  const Comp = REGISTRY[flat?.type];
   if (!Comp || !Comp.isValid) return false;
-  return Comp.isValid(value, task);
+  return Comp.isValid(value, flat);
 }
 
 export default function TaskRenderer({ task, value, onChange, isDisabled }) {
-  const Comp = REGISTRY[task?.type];
+  const flat = flatten(task);
+  const Comp = REGISTRY[flat?.type];
   if (!Comp) {
     return (
       <div className="rounded-2xl border border-danger/40 bg-danger/10 p-4 text-sm text-danger">
-        Unknown task type: <code>{task?.type}</code>
+        Unknown task type: <code>{flat?.type}</code>
       </div>
     );
   }
   return (
-    <Comp task={task} value={value} onChange={onChange} isDisabled={isDisabled} />
+    <Comp task={flat} value={value} onChange={onChange} isDisabled={isDisabled} />
   );
 }
