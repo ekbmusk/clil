@@ -25,10 +25,9 @@ Repo: <https://github.com/ekbmusk/clil>
 
 ### 1.1 backend (FastAPI)
 1. Railway → **New Project → Deploy from GitHub repo → `ekbmusk/clil`**.
-2. Railway сам подхватит `railway.json` из корня → соберёт `backend/Dockerfile`.
-3. Service **Settings**:
-   - **Root Directory**: `/` (оставить пустым).
-   - **Watch Paths**: `backend/**`, `tasks_v1.json` (чтобы пересборка только при изменениях бэка).
+2. Service **Settings**:
+   - **Root Directory**: `backend` ← обязательно. Railway возьмёт `backend/Dockerfile` и `backend/railway.json` если есть.
+   - **Watch Paths**: `backend/**`.
    - **Networking → Generate Domain** → получишь `https://<...>.up.railway.app`. Запиши — это `BACKEND_PUBLIC_URL`.
 4. **Variables** (Settings → Variables):
    ```
@@ -49,8 +48,7 @@ Repo: <https://github.com/ekbmusk/clil>
 ### 1.2 bot (aiogram polling)
 1. В **том же** Railway-проекте: **New Service → GitHub repo → `ekbmusk/clil`**.
 2. Settings:
-   - **Root Directory**: `/`.
-   - **Build → Dockerfile Path**: `bot/Dockerfile` (override через UI, потому что `railway.json` смотрит на backend).
+   - **Root Directory**: `bot` ← обязательно.
    - **Watch Paths**: `bot/**`.
    - **Networking**: оставить без публичного домена (бот сам обращается к Telegram).
 3. **Variables**:

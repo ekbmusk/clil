@@ -5,7 +5,8 @@ ensured.
 Locations searched, in order:
   1. $TASKS_JSON_PATH
   2. /tasks_v1.json (Docker bind path)
-  3. <backend>/../tasks_v1.json (local dev with project-root tasks file)
+  3. <backend>/tasks_v1.json (shipped inside the backend image — Railway path)
+  4. <backend>/../tasks_v1.json (local dev with project-root tasks file)
 """
 from __future__ import annotations
 
@@ -38,7 +39,9 @@ def _locate_tasks_json() -> Optional[Path]:
     if env_path:
         candidates.append(Path(env_path))
     candidates.append(Path("/tasks_v1.json"))
-    # backend/app/database/seed.py → backend/.. = project root
+    # backend/app/database/seed.py → backend/ = shipped seed inside image
+    candidates.append(Path(__file__).resolve().parent.parent.parent / "tasks_v1.json")
+    # backend/app/database/seed.py → backend/.. = project root (local dev)
     candidates.append(Path(__file__).resolve().parent.parent.parent.parent / "tasks_v1.json")
     for p in candidates:
         if p.is_file():
