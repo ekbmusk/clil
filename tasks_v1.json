@@ -94,7 +94,7 @@
           "type": "classification",
           "difficulty": 2,
           "prompt": "Sort by density (lead 11300, aluminium 2700, steel 7700, copper 8900, tin 7300 kg/m³):",
-          "items": ["lead", "aluminium", "steel", "copper", "tin"],
+          "items": ["lead", "aluminium", "copper", "tin"],
           "categories": ["Higher than steel", "Lower than steel"],
           "correct_mapping": {
             "lead": "Higher than steel",
