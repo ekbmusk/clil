@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html,
+  body,
+  #root {
+    @apply min-h-screen;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    overscroll-behavior-y: none;
+  }
+  ::selection {
+    background: rgba(108, 99, 255, 0.35);
+  }
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-[480px] px-4;
+  }
+  .hairline {
+    @apply border-t border-border;
+  }
+}
+
+/* Honour user's motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

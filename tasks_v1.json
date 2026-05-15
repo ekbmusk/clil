@@ -1,0 +1,318 @@
+{
+  "schema_version": "1.0",
+  "description": "Physics CLIL tasks for Telegram miniapp. Duolingo-style microtasks in English.",
+
+  "task_types": {
+    "single_choice": {
+      "fields": ["prompt", "options[]", "correct_index", "feedback_right", "feedback_wrong", "language_tip?"]
+    },
+    "fill_blank": {
+      "fields": ["prompt_template", "correct_answers[]", "feedback_right", "feedback_wrong", "language_tip?"],
+      "note": "prompt_template uses ___ for blank. correct_answers is array for synonyms/variations."
+    },
+    "matching": {
+      "fields": ["left_items[]", "right_items[]", "correct_pairs[]"],
+      "note": "correct_pairs maps left index → right index"
+    },
+    "classification": {
+      "fields": ["prompt", "items[]", "categories[]", "correct_mapping{}"],
+      "note": "correct_mapping: item → category"
+    },
+    "ordering": {
+      "fields": ["prompt", "items[]", "correct_order[]"],
+      "note": "correct_order is array of item indices in correct order"
+    }
+  },
+
+  "lessons": [
+    {
+      "id": "1.3",
+      "topic": "Making measurements",
+      "title": "Density",
+      "intro": "Learn to compare materials by how dense they are.",
+      "physics_target": "density formula and comparison",
+      "language_target": "comparative and superlative adjectives",
+      "tasks": [
+
+        {
+          "id": "1.3.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What does density measure?",
+          "options": [
+            "How heavy an object is",
+            "How much mass is in a given volume",
+            "How big an object is",
+            "How fast an object moves"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Density = mass ÷ volume.",
+          "feedback_wrong": "Density tells us how much mass fits in a certain volume."
+        },
+
+        {
+          "id": "1.3.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "The density of water is 1 g/cm³. How do we say this in words?",
+          "options": [
+            "one gram per centimetre cubed",
+            "one centimetre per gram",
+            "one gram and one centimetre",
+            "one gram times centimetre cubed"
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. The slash (/) means 'per' = 'for each'.",
+          "feedback_wrong": "The slash / means 'per'. So g/cm³ = 'gram per centimetre cubed'.",
+          "language_tip": "'per' means 'for each' — used in units like km/h, m/s."
+        },
+
+        {
+          "id": "1.3.3",
+          "type": "fill_blank",
+          "difficulty": 1,
+          "prompt_template": "Steel is ___ than aluminium. (use comparative)",
+          "correct_answers": ["denser", "heavier"],
+          "feedback_right": "Correct. 'Denser' is the comparative form of 'dense'.",
+          "feedback_wrong": "We add '-er' to short adjectives: dense → denser.",
+          "language_tip": "Comparative: short adjective + '-er' + 'than'."
+        },
+
+        {
+          "id": "1.3.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Osmium is the ___ metal in the Periodic Table. (use superlative of 'dense')",
+          "correct_answers": ["densest"],
+          "feedback_right": "Correct. Superlative = 'the' + adjective + '-est'.",
+          "feedback_wrong": "Superlative form of 'dense' is 'densest'.",
+          "language_tip": "Superlative: 'the' + short adjective + '-est'."
+        },
+
+        {
+          "id": "1.3.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort by density (lead 11300, aluminium 2700, steel 7700, copper 8900, tin 7300 kg/m³):",
+          "items": ["lead", "aluminium", "steel", "copper", "tin"],
+          "categories": ["Higher than steel", "Lower than steel"],
+          "correct_mapping": {
+            "lead": "Higher than steel",
+            "copper": "Higher than steel",
+            "aluminium": "Lower than steel",
+            "tin": "Lower than steel"
+          }
+        },
+
+        {
+          "id": "1.3.6",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Which is the densest metal? lead 11300, gold 19300, platinum 21400, silver 10500 (kg/m³)",
+          "options": ["lead", "gold", "platinum", "silver"],
+          "correct_index": 2,
+          "feedback_right": "Correct. Platinum has the highest density (21400 kg/m³).",
+          "feedback_wrong": "Look for the biggest number. Platinum = 21400 kg/m³."
+        },
+
+        {
+          "id": "1.3.7",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match each adjective with its comparative form:",
+          "left_items": ["dense", "heavy", "high", "low"],
+          "right_items": ["lower", "denser", "higher", "heavier"],
+          "correct_pairs": [[0,1],[1,3],[2,2],[3,0]]
+        },
+
+        {
+          "id": "1.3.8",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "Gold (19300) is denser ___ silver (10500).",
+          "correct_answers": ["than"],
+          "feedback_right": "Correct. Comparative always uses 'than'.",
+          "feedback_wrong": "After a comparative form, we always use 'than'.",
+          "language_tip": "Rule: comparative + 'than' + second thing."
+        },
+
+        {
+          "id": "1.3.9",
+          "type": "ordering",
+          "difficulty": 3,
+          "prompt": "Put the steps to measure density of a steel cube in order:",
+          "items": [
+            "Find the mass of the cube on a balance",
+            "Fill a measuring cylinder halfway with water",
+            "Record the initial volume of water",
+            "Immerse the cube in the water",
+            "Record the new volume",
+            "Calculate volume = new − initial"
+          ],
+          "correct_order": [0, 1, 2, 3, 4, 5]
+        },
+
+        {
+          "id": "1.3.10",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "A block has mass 200 g and volume 50 cm³. What is its density?",
+          "options": ["4 g/cm³", "10 g/cm³", "150 g/cm³", "250 g/cm³"],
+          "correct_index": 0,
+          "feedback_right": "Correct. Density = 200 ÷ 50 = 4 g/cm³.",
+          "feedback_wrong": "Density = mass ÷ volume = 200 ÷ 50 = 4 g/cm³."
+        }
+      ]
+    },
+
+    {
+      "id": "2.1",
+      "topic": "Describing motion",
+      "title": "Movement vocabulary",
+      "intro": "Learn the key words used to describe how things move.",
+      "physics_target": "motion terminology",
+      "language_target": "defining relative clauses (which / that)",
+      "tasks": [
+
+        {
+          "id": "2.1.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each word with its meaning:",
+          "left_items": ["speed", "distance", "motion", "metre"],
+          "right_items": [
+            "another word for 'movement'",
+            "how fast something is moving",
+            "a unit of distance",
+            "how far something has moved"
+          ],
+          "correct_pairs": [[0,1],[1,3],[2,0],[3,2]]
+        },
+
+        {
+          "id": "2.1.2",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each verb with its meaning:",
+          "left_items": ["accelerate", "decelerate", "calculate"],
+          "right_items": [
+            "to slow down",
+            "to work out a numerical value",
+            "to go faster"
+          ],
+          "correct_pairs": [[0,2],[1,0],[2,1]]
+        },
+
+        {
+          "id": "2.1.3",
+          "type": "fill_blank",
+          "difficulty": 1,
+          "prompt_template": "An equation is a formula ___ shows how quantities are related.",
+          "correct_answers": ["that", "which"],
+          "feedback_right": "Correct. Both 'that' and 'which' work in defining clauses.",
+          "feedback_wrong": "Use 'that' or 'which' to define what something is.",
+          "language_tip": "Defining clause: noun + 'that/which' + verb."
+        },
+
+        {
+          "id": "2.1.4",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Which sentence is a correct definition?",
+          "options": [
+            "Speed is a noun which tells us how fast something is moving.",
+            "Speed which is a noun tells how fast moving.",
+            "A noun speed that tells fast moving.",
+            "Speed it is fast moving thing."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Pattern: [term] + 'is a' + [class] + 'which/that' + [definition].",
+          "feedback_wrong": "Definitions follow: [term] is a [class] which/that [definition]."
+        },
+
+        {
+          "id": "2.1.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort these words by type:",
+          "items": ["speed", "calculate", "distance", "accelerate", "metre", "decelerate"],
+          "categories": ["Noun", "Verb"],
+          "correct_mapping": {
+            "speed": "Noun",
+            "distance": "Noun",
+            "metre": "Noun",
+            "calculate": "Verb",
+            "accelerate": "Verb",
+            "decelerate": "Verb"
+          }
+        },
+
+        {
+          "id": "2.1.6",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Gradient is a noun ___ tells us how steep a graph is.",
+          "correct_answers": ["that", "which"],
+          "feedback_right": "Correct. 'That' or 'which' both define what gradient does.",
+          "feedback_wrong": "Defining clauses use 'that' or 'which'."
+        },
+
+        {
+          "id": "2.1.7",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "A car is 'decelerating'. What does this mean?",
+          "options": [
+            "Moving at constant speed",
+            "Slowing down",
+            "Speeding up",
+            "Going backwards"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Decelerate = to slow down.",
+          "feedback_wrong": "Prefix 'de-' often means 'down/reduce'. Decelerate = slow down."
+        },
+
+        {
+          "id": "2.1.8",
+          "type": "matching",
+          "difficulty": 3,
+          "prompt": "Match the description to the type of motion:",
+          "left_items": [
+            "Travelling at 30 m/s",
+            "Speed changing from 40 to 20 m/s",
+            "Going faster"
+          ],
+          "right_items": ["accelerating", "constant speed", "decelerating"],
+          "correct_pairs": [[0,1],[1,2],[2,0]]
+        },
+
+        {
+          "id": "2.1.9",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "Motion is a noun which is another word for ___.",
+          "correct_answers": ["movement"],
+          "feedback_right": "Correct. Motion = movement.",
+          "feedback_wrong": "'Motion' and 'movement' mean the same thing."
+        },
+
+        {
+          "id": "2.1.10",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Choose the correct definition of 'distance':",
+          "options": [
+            "Distance is a verb that means to move.",
+            "Distance is a noun which tells us how far something has moved.",
+            "Distance is an adjective that describes far things.",
+            "Distance is a unit of speed."
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Distance = noun, tells us how far.",
+          "feedback_wrong": "Distance is a NOUN (a thing), not a verb or adjective."
+        }
+      ]
+    }
+  ]
+}

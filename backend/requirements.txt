@@ -1,0 +1,9 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+sqlalchemy==2.0.36
+pydantic==2.10.2
+python-dotenv==1.0.1
+python-multipart==0.0.17
+httpx==0.27.2
+# Postgres driver — used in cloud (Neon/Supabase). Local dev still uses SQLite.
+psycopg2-binary==2.9.10
