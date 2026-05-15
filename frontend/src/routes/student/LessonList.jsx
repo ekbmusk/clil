@@ -7,6 +7,7 @@ import Chip from '../../components/ui/Chip';
 import ProgressBar from '../../components/ui/ProgressBar';
 import Button from '../../components/ui/Button';
 import { useLessonStore } from '../../store/lessonStore';
+import { mainButton, backButton } from '../../lib/telegram';
 
 export default function LessonList() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ export default function LessonList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Make sure stale player buttons don't leak onto the list screen.
+    mainButton.hide();
+    backButton.hide();
     let cancelled = false;
     (async () => {
       try {

@@ -8,6 +8,8 @@ export const useLessonStore = create((set, get) => ({
   currentTaskIndex: 0,
   // Map task_external_id -> { is_correct, correct_value, feedback, language_tip }
   attemptResults: {},
+  // When set, the player only iterates over these task external_ids (retry mode).
+  replayQueue: null,
 
   setLessons(lessons) {
     set({ lessons });
@@ -18,6 +20,7 @@ export const useLessonStore = create((set, get) => ({
       currentLesson: lesson,
       currentTaskIndex: 0,
       attemptResults: {},
+      replayQueue: null,
     });
   },
 
@@ -26,10 +29,13 @@ export const useLessonStore = create((set, get) => ({
   },
 
   goNext() {
-    const { currentLesson, currentTaskIndex } = get();
+    const { currentLesson, currentTaskIndex, replayQueue } = get();
     if (!currentLesson) return;
+    const total = replayQueue
+      ? replayQueue.length
+      : currentLesson.tasks?.length ?? 0;
     const next = currentTaskIndex + 1;
-    if (next < (currentLesson.tasks?.length ?? 0)) {
+    if (next < total) {
       set({ currentTaskIndex: next });
     }
   },
@@ -40,7 +46,27 @@ export const useLessonStore = create((set, get) => ({
     }));
   },
 
+  startReplay(ids) {
+    // Strip prior results for these tasks so the player treats them as fresh.
+    set((s) => {
+      const next = { ...s.attemptResults };
+      ids.forEach((id) => {
+        delete next[id];
+      });
+      return {
+        replayQueue: ids,
+        currentTaskIndex: 0,
+        attemptResults: next,
+      };
+    });
+  },
+
   resetSession() {
-    set({ currentLesson: null, currentTaskIndex: 0, attemptResults: {} });
+    set({
+      currentLesson: null,
+      currentTaskIndex: 0,
+      attemptResults: {},
+      replayQueue: null,
+    });
   },
 }));

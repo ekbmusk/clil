@@ -90,26 +90,19 @@ class BackendClient:
         return data or []
 
     async def get_my_progress(self, telegram_id: int) -> Optional[dict]:
-        """Streak, completed lessons, average accuracy.
-
-        Tries `/api/users/me?telegram_id=` first (lightweight), falls back to
-        deriving from the lessons list if that endpoint is missing.
+        """Aggregate stats for /profile. Returns:
+        {first_name, streak_count, completed_lessons, average_accuracy(%)}.
+        Returns None if backend is unreachable or user isn't registered yet.
         """
-        me = await self._get("/api/users/me", telegram_id=telegram_id)
-        if me is not None:
-            return me
-
-        lessons = await self.get_lessons(telegram_id)
-        if not lessons:
+        stats = await self._get(f"/api/users/by-telegram/{telegram_id}/stats")
+        if stats is None:
             return None
-        completed = [l for l in lessons if l.get("completed_at")]
-        accuracies = [l.get("accuracy") for l in completed if l.get("accuracy") is not None]
-        avg = round(sum(accuracies) / len(accuracies), 1) if accuracies else None
+        avg = stats.get("avg_accuracy")
         return {
-            "first_name": None,
-            "streak_count": None,
-            "completed_lessons": len(completed),
-            "average_accuracy": avg,
+            "first_name": stats.get("first_name"),
+            "streak_count": stats.get("streak_count"),
+            "completed_lessons": stats.get("completed_lessons"),
+            "average_accuracy": round((avg or 0) * 100, 1) if avg is not None else None,
         }
 
     async def notify_teacher_of_attempt(self, *args: Any, **kwargs: Any) -> None:

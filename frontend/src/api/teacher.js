@@ -15,6 +15,16 @@ export async function attempts(filters = {}) {
   return data;
 }
 
+export async function attemptDetail(id) {
+  const { data } = await apiClient.get(`/teacher/attempts/${id}`);
+  return data;
+}
+
+export async function studentProgress(userId) {
+  const { data } = await apiClient.get(`/teacher/students/${userId}/progress`);
+  return data;
+}
+
 export async function broadcast(payload) {
   const { data } = await apiClient.post('/teacher/broadcast', payload);
   return data;

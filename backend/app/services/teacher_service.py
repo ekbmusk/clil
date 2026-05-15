@@ -16,6 +16,7 @@ from app.database.models import (
     TaskAttempt,
     User,
 )
+from app.services.grader import grade
 
 
 def stats(db: Session) -> dict:
@@ -196,6 +197,120 @@ def list_attempts(
             }
         )
     return out
+
+
+def _user_display_name(u: User) -> str:
+    return (
+        " ".join(filter(None, [u.first_name, u.last_name]))
+        or u.username
+        or str(u.telegram_id)
+    )
+
+
+def student_progress(db: Session, *, user_id: int) -> Optional[dict]:
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return None
+
+    lessons = db.query(Lesson).order_by(Lesson.position, Lesson.id).all()
+    progress_rows = (
+        db.query(LessonProgress)
+        .filter(LessonProgress.user_id == user_id)
+        .all()
+    )
+    by_lesson = {p.lesson_id: p for p in progress_rows}
+
+    lesson_rows = []
+    for l in lessons:
+        p = by_lesson.get(l.id)
+        lesson_rows.append(
+            {
+                "external_id": l.external_id,
+                "title": l.title,
+                "topic": l.topic,
+                "correct_count": p.correct_count if p else 0,
+                "total_count": p.total_count if p else 0,
+                "accuracy": p.accuracy if p else 0.0,
+                "completed_at": p.completed_at if p else None,
+            }
+        )
+
+    # Recent attempts.
+    recent = (
+        db.query(TaskAttempt, LessonTask, Lesson)
+        .join(LessonTask, LessonTask.id == TaskAttempt.task_id)
+        .join(Lesson, Lesson.id == LessonTask.lesson_id)
+        .filter(TaskAttempt.user_id == user_id)
+        .order_by(TaskAttempt.created_at.desc())
+        .limit(50)
+        .all()
+    )
+    attempts = [
+        {
+            "id": a.id,
+            "is_correct": a.is_correct,
+            "created_at": a.created_at,
+            "task": {
+                "external_id": t.external_id,
+                "type": t.type,
+                "difficulty": t.difficulty,
+            },
+            "lesson": {"external_id": l.external_id, "title": l.title},
+        }
+        for a, t, l in recent
+    ]
+
+    return {
+        "user": {
+            "id": user.id,
+            "telegram_id": user.telegram_id,
+            "name": _user_display_name(user),
+            "username": user.username,
+            "role": user.role,
+            "streak_count": user.streak_count or 0,
+        },
+        "lessons": lesson_rows,
+        "recent_attempts": attempts,
+    }
+
+
+def attempt_detail(db: Session, *, attempt_id: int) -> Optional[dict]:
+    row = (
+        db.query(TaskAttempt, LessonTask, Lesson, User)
+        .join(LessonTask, LessonTask.id == TaskAttempt.task_id)
+        .join(Lesson, Lesson.id == LessonTask.lesson_id)
+        .join(User, User.id == TaskAttempt.user_id)
+        .filter(TaskAttempt.id == attempt_id)
+        .first()
+    )
+    if row is None:
+        return None
+    attempt, task, lesson, user = row
+    grading = grade(task, attempt.payload or {})
+    return {
+        "id": attempt.id,
+        "is_correct": attempt.is_correct,
+        "answer_payload": attempt.payload,
+        "correct_value": grading.get("correct_value"),
+        "feedback": grading.get("feedback"),
+        "created_at": attempt.created_at,
+        "task": {
+            "external_id": task.external_id,
+            "type": task.type,
+            "difficulty": task.difficulty,
+            "payload": task.payload,  # full payload, teacher gets to see answers
+        },
+        "lesson": {
+            "external_id": lesson.external_id,
+            "title": lesson.title,
+            "topic": lesson.topic,
+        },
+        "user": {
+            "id": user.id,
+            "telegram_id": user.telegram_id,
+            "name": _user_display_name(user),
+        },
+    }
 
 
 def queue_broadcast(

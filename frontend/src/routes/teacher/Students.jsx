@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as teacherApi from '../../api/teacher';
 import Card from '../../components/ui/Card';
 
 export default function Students() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [active, setActive] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +55,7 @@ export default function Students() {
             {rows.map((s) => (
               <tr
                 key={s.id}
-                onClick={() => setActive(s)}
+                onClick={() => navigate(`/teacher/students/${s.id}`)}
                 className="cursor-pointer border-b border-border last:border-b-0 hover:bg-surface-2/40"
               >
                 <td className="px-3 py-2 text-ink">
@@ -80,41 +81,9 @@ export default function Students() {
         </table>
       </Card>
 
-      {active && (
-        <Card>
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-lg font-bold text-ink">
-                {active.name ?? `#${active.id}`}
-              </h2>
-              <p className="text-xs text-ink-muted">Telegram ID: {active.telegram_id ?? '—'}</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setActive(null)}
-              className="text-sm text-ink-muted hover:text-ink"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-surface-2 p-3">
-              <p className="text-xs text-ink-muted">Streak</p>
-              <p className="text-xl font-bold text-ink">{active.streak ?? 0}</p>
-            </div>
-            <div className="rounded-xl bg-surface-2 p-3">
-              <p className="text-xs text-ink-muted">Сабақ</p>
-              <p className="text-xl font-bold text-ink">{active.completed_lessons ?? 0}</p>
-            </div>
-            <div className="rounded-xl bg-surface-2 p-3">
-              <p className="text-xs text-ink-muted">Дәлдік</p>
-              <p className="text-xl font-bold text-ink">
-                {Math.round((active.avg_accuracy ?? 0) * 100)}%
-              </p>
-            </div>
-          </div>
-        </Card>
-      )}
+      <p className="text-center text-xs text-ink-muted">
+        Толық ақпарат үшін оқушыны таңда.
+      </p>
     </div>
   );
 }

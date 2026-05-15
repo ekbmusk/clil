@@ -7,22 +7,16 @@ import LessonList from './routes/student/LessonList';
 import LessonPlayer from './routes/student/LessonPlayer';
 import Dashboard from './routes/teacher/Dashboard';
 import Students from './routes/teacher/Students';
+import StudentDetail from './routes/teacher/StudentDetail';
 import Attempts from './routes/teacher/Attempts';
 import LessonEditor from './routes/teacher/LessonEditor';
 import Broadcast from './routes/teacher/Broadcast';
 import { useUserStore } from './store/userStore';
+import { applyTheme, ready as telegramReady } from './lib/telegram';
 
 function bootstrapTelegram() {
-  const WebApp = window.Telegram?.WebApp;
-  if (!WebApp) return;
-  try {
-    WebApp.ready();
-    WebApp.expand();
-    WebApp.setHeaderColor?.('#0F0F1A');
-    WebApp.setBackgroundColor?.('#0F0F1A');
-  } catch {
-    /* ignore */
-  }
+  telegramReady();
+  applyTheme({ background: '#0F0F1A' });
 }
 
 function Splash({ children }) {
@@ -89,6 +83,7 @@ export default function App() {
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="students" element={<Students />} />
+            <Route path="students/:userId" element={<StudentDetail />} />
             <Route path="attempts" element={<Attempts />} />
             <Route path="lessons" element={<LessonEditor />} />
             <Route path="broadcast" element={<Broadcast />} />

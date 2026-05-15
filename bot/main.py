@@ -9,11 +9,9 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.types import BotCommand
 
 import api
+import notifier
 from config import BOT_TOKEN, assert_runtime_config
 from handlers import all_routers
-
-# TODO(notifier): uncomment to enable the backend → bot notification loop
-# import notifier  # noqa: F401
 
 
 logging.basicConfig(
@@ -47,10 +45,8 @@ async def main() -> None:
     for router in all_routers():
         dispatcher.include_router(router)
 
-    # TODO(notifier): once backend exposes /api/bot/notifications, flip these
-    # two lines on to push attempt alerts / streak reminders to users.
-    # stop_event = asyncio.Event()
-    # notifier_task = asyncio.create_task(notifier.poll_notifications(bot, stop_event))
+    stop_event = asyncio.Event()
+    notifier_task = asyncio.create_task(notifier.poll_notifications(bot, stop_event))
 
     try:
         await bot.set_my_commands(BOT_COMMANDS)
@@ -59,9 +55,11 @@ async def main() -> None:
             bot, allowed_updates=dispatcher.resolve_used_update_types()
         )
     finally:
-        # TODO(notifier): mirror these on the shutdown path:
-        # stop_event.set()
-        # await notifier_task
+        stop_event.set()
+        try:
+            await asyncio.wait_for(notifier_task, timeout=5)
+        except (asyncio.TimeoutError, asyncio.CancelledError):
+            pass
         await api.shutdown()
         await bot.session.close()
 

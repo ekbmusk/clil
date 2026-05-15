@@ -5,6 +5,7 @@ import * as groupsApi from '../../api/groups';
 import * as lessonsApi from '../../api/lessons';
 import Card from '../../components/ui/Card';
 import Chip from '../../components/ui/Chip';
+import AttemptDetail from './AttemptDetail';
 
 export default function Attempts() {
   const [filters, setFilters] = useState({ group_id: '', lesson_external_id: '' });
@@ -13,6 +14,7 @@ export default function Attempts() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openAttemptId, setOpenAttemptId] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -96,32 +98,44 @@ export default function Attempts() {
 
       <div className="space-y-2">
         {rows.map((a, i) => (
-          <Card key={a.id ?? i} className="py-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-ink">
-                  {a.user?.name ?? a.user?.telegram_id ?? '—'}
-                </p>
-                <p className="text-xs text-ink-muted">
-                  {a.task?.external_id} · {a.task?.type ?? '—'}
-                  {a.lesson?.title ? ` · ${a.lesson.title}` : ''}
-                </p>
+          <button
+            type="button"
+            key={a.id ?? i}
+            onClick={() => a.id && setOpenAttemptId(a.id)}
+            className="w-full text-left"
+          >
+            <Card className="py-3 transition-colors hover:bg-surface-2/40">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-ink">
+                    {a.user?.name ?? a.user?.telegram_id ?? '—'}
+                  </p>
+                  <p className="text-xs text-ink-muted">
+                    {a.task?.external_id} · {a.task?.type ?? '—'}
+                    {a.lesson?.title ? ` · ${a.lesson.title}` : ''}
+                  </p>
+                </div>
+                <Chip tone={a.is_correct ? 'success' : 'danger'}>
+                  {a.is_correct ? 'Дұрыс' : 'Қате'}
+                </Chip>
               </div>
-              <Chip tone={a.is_correct ? 'success' : 'danger'}>
-                {a.is_correct ? 'Дұрыс' : 'Қате'}
-              </Chip>
-            </div>
-            {a.created_at && (
-              <p className="mt-2 text-[11px] text-ink-faint">
-                {new Date(a.created_at).toLocaleString('kk-KZ')}
-              </p>
-            )}
-          </Card>
+              {a.created_at && (
+                <p className="mt-2 text-[11px] text-ink-faint">
+                  {new Date(a.created_at).toLocaleString('kk-KZ')}
+                </p>
+              )}
+            </Card>
+          </button>
         ))}
         {!loading && rows.length === 0 && (
           <p className="text-center text-ink-muted">Талпыныстар жоқ.</p>
         )}
       </div>
+
+      <AttemptDetail
+        attemptId={openAttemptId}
+        onClose={() => setOpenAttemptId(null)}
+      />
     </div>
   );
 }

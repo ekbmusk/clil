@@ -142,3 +142,21 @@ def require_teacher(user: User = Depends(get_current_user)) -> User:
             detail="Teacher access required",
         )
     return user
+
+
+def require_bot_token(
+    x_bot_token: Optional[str] = Header(None, alias="X-Bot-Token"),
+) -> None:
+    """Gate bot-only endpoints behind a shared secret.
+
+    If `INTERNAL_BOT_TOKEN` is unset the endpoint stays open (dev convenience);
+    in production the env var should be present and matching.
+    """
+    expected = os.getenv("INTERNAL_BOT_TOKEN", "").strip()
+    if not expected:
+        return
+    if (x_bot_token or "").strip() != expected:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid bot token",
+        )

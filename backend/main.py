@@ -20,6 +20,7 @@ logging.basicConfig(
 from app.database.database import create_tables  # noqa: E402
 from app.routes import (  # noqa: E402
     attempts,
+    bot,
     groups,
     lessons,
     teacher,
@@ -53,6 +54,7 @@ app.include_router(lessons.router)
 app.include_router(attempts.router)
 app.include_router(groups.router)
 app.include_router(teacher.router)
+app.include_router(bot.router)
 
 
 @app.get("/api/health")

@@ -24,3 +24,4 @@ class LessonFinalizeOut(BaseModel):
     total_count: int
     accuracy: float
     completed_at: Optional[datetime] = None
+    streak_count: int = 0

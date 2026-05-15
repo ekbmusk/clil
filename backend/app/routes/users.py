@@ -10,9 +10,9 @@ from fastapi.responses import RedirectResponse, Response
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
-from app.database.models import User
+from app.database.models import Lesson, LessonProgress, User
 from app.schemas.user import UserOut, UserRegisterOut
-from app.utils.auth import get_current_user
+from app.utils.auth import get_current_user, require_bot_token
 
 router = APIRouter(prefix="/api/users", tags=["users"])
 logger = logging.getLogger(__name__)
@@ -27,6 +27,43 @@ def register(user: User = Depends(get_current_user)):
 @router.get("/me", response_model=UserOut)
 def me(user: User = Depends(get_current_user)):
     return user
+
+
+@router.get(
+    "/by-telegram/{telegram_id}",
+    response_model=UserOut,
+    dependencies=[Depends(require_bot_token)],
+)
+def by_telegram(telegram_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@router.get(
+    "/by-telegram/{telegram_id}/stats",
+    dependencies=[Depends(require_bot_token)],
+)
+def by_telegram_stats(telegram_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    rows = (
+        db.query(LessonProgress).filter(LessonProgress.user_id == user.id).all()
+    )
+    completed = sum(1 for r in rows if r.completed_at is not None)
+    avg_accuracy = (sum(r.accuracy for r in rows) / len(rows)) if rows else 0.0
+    return {
+        "telegram_id": user.telegram_id,
+        "first_name": user.first_name,
+        "username": user.username,
+        "role": user.role,
+        "streak_count": user.streak_count or 0,
+        "completed_lessons": completed,
+        "total_lessons_with_progress": len(rows),
+        "avg_accuracy": float(avg_accuracy),
+    }
 
 
 @router.get("/{user_id}/avatar")

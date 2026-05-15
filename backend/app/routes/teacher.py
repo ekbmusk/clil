@@ -56,6 +56,30 @@ def attempts(
     )
 
 
+@router.get("/attempts/{attempt_id}")
+def attempt_detail(
+    attempt_id: int,
+    _t: User = Depends(require_teacher),
+    db: Session = Depends(get_db),
+):
+    detail = teacher_service.attempt_detail(db, attempt_id=attempt_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Attempt not found")
+    return detail
+
+
+@router.get("/students/{user_id}/progress")
+def student_progress(
+    user_id: int,
+    _t: User = Depends(require_teacher),
+    db: Session = Depends(get_db),
+):
+    detail = teacher_service.student_progress(db, user_id=user_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return detail
+
+
 @router.post("/broadcast", response_model=BroadcastOut)
 def broadcast(
     payload: BroadcastIn,

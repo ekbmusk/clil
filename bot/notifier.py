@@ -34,13 +34,27 @@ logger = logging.getLogger(__name__)
 
 def _format(notification: dict) -> tuple[str, Optional[str]]:
     """Return (text, optional_lesson_external_id) for a notification."""
-    n_type = notification.get("type")
+    kind = notification.get("kind") or notification.get("type")
     payload = notification.get("payload") or {}
 
-    if n_type == "broadcast":
+    if kind == "broadcast":
         return payload.get("text") or "", None
 
-    if n_type == "new_attempt":
+    if kind == "lesson_finished":
+        student = payload.get("student_name") or "Оқушы"
+        lesson = payload.get("lesson_title") or payload.get("lesson_external_id") or "сабақ"
+        acc_raw = payload.get("accuracy")
+        acc = (
+            f"{round(acc_raw * 100)}%"
+            if isinstance(acc_raw, (int, float))
+            else "—"
+        )
+        return (
+            f"🎓 *{student}* «{lesson}» сабағын аяқтады.\nДәлдік: *{acc}*",
+            payload.get("lesson_external_id"),
+        )
+
+    if kind == "new_attempt":
         student = payload.get("student_name") or "Оқушы"
         username = payload.get("student_username")
         suffix = f" (@{username})" if username else ""
@@ -50,19 +64,30 @@ def _format(notification: dict) -> tuple[str, Optional[str]]:
             payload.get("lesson_external_id"),
         )
 
-    if n_type == "lesson_reminder":
+    if kind == "lesson_reminder":
         lesson = payload.get("lesson_title") or payload.get("lesson_external_id") or "сабақ"
         return (
             f"🔥 Стригіңді жоғалтпа! «{lesson}» сабағын аяқтауды ұмытпа.",
             payload.get("lesson_external_id"),
         )
 
-    return payload.get("text") or n_type or "Жаңа хабар", payload.get("lesson_external_id")
+    return payload.get("text") or kind or "Жаңа хабар", payload.get("lesson_external_id")
+
+
+def _recipient_telegram_id(notification: dict) -> Optional[int]:
+    """Backend nests recipient info under `user.telegram_id`."""
+    user = notification.get("user") or {}
+    tg_id = user.get("telegram_id") or notification.get("telegram_id")
+    try:
+        return int(tg_id) if tg_id is not None else None
+    except (TypeError, ValueError):
+        return None
 
 
 async def deliver_one(bot: Bot, notification: dict) -> bool:
     text, lesson_id = _format(notification)
-    if not text:
+    chat_id = _recipient_telegram_id(notification)
+    if not text or chat_id is None:
         await client().ack_notification(notification["id"])
         return True
 
@@ -72,7 +97,7 @@ async def deliver_one(bot: Bot, notification: dict) -> bool:
 
     try:
         await bot.send_message(
-            chat_id=notification["telegram_id"],
+            chat_id=chat_id,
             text=text,
             parse_mode="Markdown",
             reply_markup=keyboard,
