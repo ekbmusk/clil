@@ -59,7 +59,17 @@ def _grade_matching(payload: dict, answer: dict) -> tuple[bool, Any]:
         return out
 
     is_correct = _as_pair_set(student_pairs) == _as_pair_set(correct_pairs)
-    return is_correct, correct_pairs
+    # Human-readable correct_value: "left → right" strings.
+    left = payload.get("left_items") or []
+    right = payload.get("right_items") or []
+    pretty: list[str] = []
+    for p in correct_pairs:
+        if isinstance(p, (list, tuple)) and len(p) == 2:
+            li, ri = p
+            l = left[li] if isinstance(li, int) and 0 <= li < len(left) else li
+            r = right[ri] if isinstance(ri, int) and 0 <= ri < len(right) else ri
+            pretty.append(f"{l} → {r}")
+    return is_correct, pretty
 
 
 def _grade_classification(payload: dict, answer: dict) -> tuple[bool, Any]:
@@ -78,7 +88,13 @@ def _grade_ordering(payload: dict, answer: dict) -> tuple[bool, Any]:
     is_correct = (
         isinstance(student_order, list) and list(student_order) == list(correct_order)
     )
-    return is_correct, correct_order
+    # Human-readable correct_value: items rearranged into the right order.
+    items = payload.get("items") or []
+    pretty: list[str] = []
+    for idx in correct_order:
+        if isinstance(idx, int) and 0 <= idx < len(items):
+            pretty.append(str(items[idx]))
+    return is_correct, pretty
 
 
 _GRADERS = {
