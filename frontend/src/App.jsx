@@ -5,6 +5,7 @@ import AppShell from './components/AppShell';
 import Onboarding from './routes/Onboarding';
 import LessonList from './routes/student/LessonList';
 import LessonPlayer from './routes/student/LessonPlayer';
+import Profile from './routes/student/Profile';
 import Dashboard from './routes/teacher/Dashboard';
 import Students from './routes/teacher/Students';
 import StudentDetail from './routes/teacher/StudentDetail';
@@ -99,6 +100,7 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<LessonList />} />
         <Route path="lesson/:externalId" element={<LessonPlayer />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
