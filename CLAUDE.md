@@ -13,7 +13,7 @@ A **lesson** is the unit of study (e.g. `1.3 Density`, `2.1 Movement vocabulary`
 - `intro` — one-sentence opener
 - `physics_target` — what physics concept is being practised
 - `language_target` — what English structure is being practised (comparatives, defining clauses, etc.)
-- `tasks[]` — an ordered list of microtasks. There are **5 task types**, all defined in `tasks_v1.json`:
+- `tasks[]` — an ordered list of microtasks. There are **6 task types**, all defined in the seed JSON:
 
 | Type | Student input | Auto-grading |
 |------|---------------|--------------|
@@ -22,10 +22,11 @@ A **lesson** is the unit of study (e.g. `1.3 Density`, `2.1 Movement vocabulary`
 | `matching` | array of `[left_index, right_index]` pairs | set-equality with `correct_pairs` |
 | `classification` | `{item: category}` map | exact match with `correct_mapping` |
 | `ordering` | array of item indices | sequence-equality with `correct_order` |
+| `graph_choice` | one option index | exact match against `correct_index`; task payload also carries `image_url` (resolved against `frontend/public/graphs/`) with `image_description` as text fallback |
 
 Every task carries `feedback_right`, `feedback_wrong`, and an optional `language_tip` — these are shown immediately after the student submits (Duolingo-style), not buffered for teacher review.
 
-The canonical content lives in `tasks_v1.json` at the project root and is seeded into the DB on backend startup (idempotent). Teachers can also author tasks via the Mini App.
+The canonical content lives in `tasks_v2.json` at the project root and is seeded into the DB on backend startup (idempotent). Teachers can also author tasks via the Mini App.
 
 **One Mini App, two roles**, gated server-side by Telegram user ID:
 
@@ -64,7 +65,7 @@ docker compose --profile bot up   # also start the bot
 ### Three services
 
 - **frontend/** — Single Telegram Mini App for both roles. React + Zustand + axios. On launch, backend returns `{ role: "student" | "teacher" }`; the app branches into `routes/student/*` or `routes/teacher/*`. Sends `X-Telegram-Init-Data` header on every API request.
-- **backend/** — FastAPI REST API under `/api/`. Thin routers → `app/services/`. SQLite auto-creates and seeds from `tasks_v1.json` on startup (idempotent). Teacher-only routes are protected by `require_teacher`.
+- **backend/** — FastAPI REST API under `/api/`. Thin routers (in `app/routes/`) → `app/services/`. SQLite auto-creates and seeds from the highest-versioned `tasks_v*.json` on startup (idempotent). Teacher-only routes are protected by `require_teacher`.
 - **bot/** — aiogram 3 long-polling. Communicates with backend via httpx. Sends streak reminders, notifies teachers when new attempts arrive.
 
 ### Backend internals
@@ -79,7 +80,7 @@ docker compose --profile bot up   # also start the bot
   - `Notification`, `BroadcastLog` — same patterns as the STEM bot.
 - **Auth** (`app/utils/auth.py`): No password login. Both roles authenticate via `X-Telegram-Init-Data`. Teacher role decided server-side by comparing Telegram ID against `TEACHER_TELEGRAM_IDS`. Students auto-registered on first launch. `require_teacher` rejects non-teacher requests. No initData signature validation in MVP — trusts the header.
 - **Grader** (`app/services/grader.py`): pure function `grade(task, answer) → {is_correct, feedback}`. One branch per task type, mirroring the table above. **Always trust the server's grading, never the client**.
-- **Seed** (`app/database/seed.py`): reads `tasks_v1.json` from project root, upserts lessons + tasks by `external_id`. Safe to re-run.
+- **Seed** (`app/database/seed.py`): locates a `tasks_v*.json` file (preferring `v2`, then `v1`) and upserts lessons + tasks by `external_id`. Search order: `$TASKS_JSON_PATH` → `/tasks_vN.json` (Docker bind) → `backend/tasks_vN.json` (image) → `backend/../tasks_vN.json` (local dev). Safe to re-run. Also ensures default groups `10A`, `11B`. Per-task JSON fields other than `id`/`type`/`difficulty` are stuffed verbatim into the `LessonTask.payload` column.
 
 ### Backend API routes (`/api/`)
 
@@ -90,18 +91,21 @@ docker compose --profile bot up   # also start the bot
 | `/attempts` | `POST /` (submit a single task answer → returns `{is_correct, correct_value, feedback, language_tip}`), `POST /finalize-lesson/{external_id}` (mark lesson complete) |
 | `/groups` | `GET /`, `POST /` (teacher), `POST /{id}/enroll`, `GET /{id}/progress` |
 | `/teacher` | `require_teacher`. `GET /stats`, `GET /students`, `GET /attempts`, `POST /broadcast`, `POST /lessons`, `PATCH /lessons/{external_id}`, `POST /tasks`, `PATCH /tasks/{id}` |
+| `/bot` | Internal bot ↔ backend bridge, authenticated with `INTERNAL_BOT_TOKEN` (not Telegram initData). |
 
 ### Frontend internals
 
 - **State**: `store/userStore.js` (user + role), `store/lessonStore.js` (catalogue cache, current lesson, current task index, per-task local answers + feedback). Zustand, no persist middleware.
 - **API layer**: `src/api/client.js` (axios, baseURL from `VITE_API_URL` or `/api`, 15s timeout, auto-attaches Telegram initData). Per-domain modules in `src/api/`.
-- **Role routing**: `App.jsx` reads `user.role` after `/users/register`. Student → `/lessons` catalogue + lesson player. Teacher → `/teacher/dashboard` with group matrix, attempt inspector, lesson editor, broadcast.
+- **Role routing**: `App.jsx` reads `user.role` after `/users/register`. First-time users (no role yet) see `routes/Onboarding.jsx`. Student → `/lessons` catalogue + lesson player. Teacher → `/teacher/dashboard` with group matrix, attempt inspector (`Attempts.jsx` / `AttemptDetail.jsx`), students view, lesson editor, broadcast. `components/AppShell.jsx` wraps both roles with the Telegram-themed shell; shared primitives live in `components/ui/`.
 - **Task renderers** (`src/components/tasks/`):
+  - `TaskRenderer.jsx` — dispatcher: picks the correct renderer by `task.type`.
   - `SingleChoice.jsx` — radio-style cards.
   - `FillBlank.jsx` — text input with `___` placeholder rendered in the prompt.
   - `Matching.jsx` — two columns; tap-left then tap-right to pair, or drag.
   - `Classification.jsx` — chips that the student drops into category buckets.
   - `Ordering.jsx` — drag handle list (hello-pangea/dnd).
+  - `GraphChoice.jsx` — image-backed multiple choice; loads SVG from `frontend/public/graphs/` (path from `image_url`) and falls back to `image_description` text if the asset is missing.
   - All render `feedback_right`/`feedback_wrong` after `POST /attempts` and surface `language_tip` if present.
 - **Telegram SDK**: `WebApp.ready()` + `expand()` + `setHeaderColor('#0F0F1A')` in `App.jsx`. Haptics on right/wrong.
 - **Vite config**: `envDir: '../'`, dev proxy `/api` → `localhost:8000`.
@@ -129,12 +133,12 @@ BACKEND_URL (default http://localhost:8000),
 DATABASE_URL (default sqlite:///./clil_bot.db),
 TEACHER_TELEGRAM_IDS (comma-separated)
 ```
-Optional: `GROQ_API_KEY` (adaptive hints), `INTERNAL_BOT_TOKEN` (bot ↔ backend shared secret).
+Optional: `GROQ_API_KEY` (adaptive hints), `INTERNAL_BOT_TOKEN` (bot ↔ backend shared secret for `/api/bot/*`), `TASKS_JSON_PATH` (override seed source — otherwise the loader picks the highest `tasks_v*.json` it can find).
 Frontend: `VITE_API_URL` (defaults to `/api` via the dev proxy).
 
 ## Where the data starts
 
-`tasks_v1.json` at the project root is the source of truth for the seed catalogue. To add lessons:
-1. Edit `tasks_v1.json` (keep the schema in the `task_types` block stable).
+`tasks_v2.json` at the project root is the current source of truth for the seed catalogue (v1 is kept as a fallback). To add lessons:
+1. Edit `tasks_v2.json` (keep the schema in the `task_types` block stable; `graph_choice` tasks reference SVGs under `frontend/public/graphs/`).
 2. Restart the backend — the seed loader upserts by `external_id`.
 3. Or use the teacher Mini App editor (writes to the same tables).
