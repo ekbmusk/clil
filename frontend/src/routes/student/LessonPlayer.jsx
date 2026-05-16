@@ -85,6 +85,10 @@ export default function LessonPlayer() {
   const [summary, setSummary] = useState(null);
   const [streakDelta, setStreakDelta] = useState(0);
   const wasReplayRef = useRef(false);
+  // Re-entrancy guard for MainButton clicks. Telegram fires click events
+  // multiple times if the handler triggers a setState that re-registers the
+  // listener mid-tap — without this, "Жалғастыру" would skip two tasks.
+  const advancingRef = useRef(false);
 
   // Load lesson
   useEffect(() => {
@@ -140,7 +144,8 @@ export default function LessonPlayer() {
   const canCheck = !!task && !result && !submitting && isAnswerValid(task, answer);
 
   const onSubmit = async () => {
-    if (!task || result) return;
+    if (!task || result || advancingRef.current) return;
+    advancingRef.current = true;
     setSubmitting(true);
     try {
       const r = await attemptsApi.submit(task.external_id, answer);
@@ -157,12 +162,24 @@ export default function LessonPlayer() {
       haptic('error');
     } finally {
       setSubmitting(false);
+      // Release on the next macrotask so a double-fire from the SDK lands
+      // while the guard is still set.
+      setTimeout(() => {
+        advancingRef.current = false;
+      }, 250);
     }
   };
 
   const onContinue = async () => {
+    if (advancingRef.current) return;
+    advancingRef.current = true;
+    const release = () =>
+      setTimeout(() => {
+        advancingRef.current = false;
+      }, 250);
     if (!isLast) {
       goNext();
+      release();
       return;
     }
     // Finalize and show summary.
@@ -186,6 +203,7 @@ export default function LessonPlayer() {
       setSummary(buildLocalSummary());
     }
     haptic('success');
+    release();
   };
 
   const buildLocalSummary = () => {
@@ -203,17 +221,27 @@ export default function LessonPlayer() {
   };
 
   const replayWrong = () => {
+    if (advancingRef.current) return;
+    advancingRef.current = true;
     const all = currentLesson?.tasks ?? [];
     const wrongIds = all
       .filter((t) => attemptResults[t.external_id]?.is_correct === false)
       .map((t) => t.external_id);
-    if (wrongIds.length === 0) return;
+    if (wrongIds.length === 0) {
+      advancingRef.current = false;
+      return;
+    }
     setSummary(null);
     startReplay(wrongIds);
     setAnswer(undefined);
+    setTimeout(() => {
+      advancingRef.current = false;
+    }, 400);
   };
 
   const goToNextLesson = () => {
+    if (advancingRef.current) return;
+    advancingRef.current = true;
     const all = lessons ?? [];
     const idx = all.findIndex((l) => l.external_id === currentLesson?.external_id);
     if (idx >= 0 && idx + 1 < all.length) {
@@ -222,6 +250,9 @@ export default function LessonPlayer() {
     } else {
       navigate('/');
     }
+    setTimeout(() => {
+      advancingRef.current = false;
+    }, 400);
   };
 
   // MainButton wiring — re-set on every relevant state change.
