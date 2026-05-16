@@ -1,0 +1,1597 @@
+{
+  "schema_version": "1.1",
+  "description": "Physics CLIL tasks for Telegram miniapp. Duolingo-style microtasks in English. 6 topics, ~120 tasks.",
+
+  "task_types": {
+    "single_choice": "prompt + options[] + correct_index",
+    "fill_blank": "prompt_template (with ___) + correct_answers[]",
+    "matching": "left_items[] + right_items[] + correct_pairs[[L,R]]",
+    "classification": "items[] + categories[] + correct_mapping{item:category}",
+    "ordering": "items[] + correct_order[indices]",
+    "graph_choice": "image_url + prompt + options[] + correct_index"
+  },
+
+  "common_fields": {
+    "id": "string, format: topic.lesson.task",
+    "type": "one of task_types",
+    "difficulty": "1=easy, 2=medium, 3=hard",
+    "physics_target": "what physics concept is tested",
+    "language_target": "what English structure is tested",
+    "concepts": "tags array for SRS/filtering",
+    "feedback_right": "shown on correct answer",
+    "feedback_wrong": "hint on wrong answer (not full solution)",
+    "language_tip": "optional English rule reminder"
+  },
+
+  "lessons": [
+    {
+      "id": "1.1",
+      "topic": "Making measurements",
+      "title": "Quantities and units",
+      "intro": "Learn the basic quantities used in physics and their units.",
+      "physics_target": "physical quantities, SI units, instruments",
+      "language_target": "defining relative clauses (which/that)",
+      "tasks": [
+        {
+          "id": "1.1.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each quantity with its SI unit:",
+          "left_items": ["length", "mass", "time", "temperature"],
+          "right_items": ["second", "kelvin", "metre", "kilogram"],
+          "correct_pairs": [[0,2],[1,3],[2,0],[3,1]],
+          "concepts": ["units", "quantities"]
+        },
+        {
+          "id": "1.1.2",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each unit with its symbol:",
+          "left_items": ["metre", "kilogram", "second", "kelvin"],
+          "right_items": ["s", "K", "m", "kg"],
+          "correct_pairs": [[0,2],[1,3],[2,0],[3,1]],
+          "concepts": ["units", "symbols"]
+        },
+        {
+          "id": "1.1.3",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is a 'quantity' in physics?",
+          "options": [
+            "Something that can be measured",
+            "The result of a measurement",
+            "A device for measuring",
+            "A type of unit"
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. A quantity = something you can measure (e.g. length, mass).",
+          "feedback_wrong": "A quantity is something measurable. The 'result' is called a value.",
+          "concepts": ["quantity"]
+        },
+        {
+          "id": "1.1.4",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match each term with its definition:",
+          "left_items": ["quantity", "value", "instrument", "unit"],
+          "right_items": [
+            "a standard amount used for measuring",
+            "a device used to measure",
+            "something that can be measured",
+            "the result of measuring a quantity"
+          ],
+          "correct_pairs": [[0,2],[1,3],[2,1],[3,0]],
+          "concepts": ["terminology"]
+        },
+        {
+          "id": "1.1.5",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A ruler is an instrument ___ is used to measure length.",
+          "correct_answers": ["that", "which"],
+          "feedback_right": "Correct. Use 'that' or 'which' to define what something does.",
+          "feedback_wrong": "Defining clauses use 'that' or 'which': instrument THAT/WHICH...",
+          "language_tip": "Pattern: noun + that/which + verb",
+          "concepts": ["defining_clauses"]
+        },
+        {
+          "id": "1.1.6",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A balance is a device ___ measures mass.",
+          "correct_answers": ["that", "which"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Same rule: noun + that/which + verb.",
+          "concepts": ["defining_clauses"]
+        },
+        {
+          "id": "1.1.7",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Choose the correct definition of 'thermometer':",
+          "options": [
+            "A thermometer is an instrument which measures temperature.",
+            "A thermometer it measures the temperature.",
+            "A thermometer is a temperature that measures.",
+            "Thermometer which a device measures temperature."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Pattern: [term] is a/an [class] which [function].",
+          "feedback_wrong": "Definition pattern: [term] is a [class] which [does what].",
+          "concepts": ["defining_clauses"]
+        },
+        {
+          "id": "1.1.8",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort these into Quantity or Unit:",
+          "items": ["length", "kilogram", "time", "second", "mass", "metre"],
+          "categories": ["Quantity", "Unit"],
+          "correct_mapping": {
+            "length": "Quantity",
+            "time": "Quantity",
+            "mass": "Quantity",
+            "kilogram": "Unit",
+            "second": "Unit",
+            "metre": "Unit"
+          },
+          "concepts": ["quantities", "units"]
+        },
+        {
+          "id": "1.1.9",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "A stopwatch is an instrument that ___ time.",
+          "correct_answers": ["measures"],
+          "feedback_right": "Correct. After 'that/which' use the verb in present simple.",
+          "feedback_wrong": "Use present simple: a stopwatch MEASURES time.",
+          "concepts": ["defining_clauses", "present_simple"]
+        },
+        {
+          "id": "1.1.10",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Which sentence uses the prefix correctly? (1 km = 1000 m)",
+          "options": [
+            "A kilometre is one thousand metres.",
+            "A kilometre is one hundred metres.",
+            "A kilometre is one millionth of a metre.",
+            "A kilometre is one tenth of a metre."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. 'kilo-' = 1000.",
+          "feedback_wrong": "Prefix 'kilo-' always means 1000.",
+          "language_tip": "Prefixes: kilo (1000), centi (1/100), milli (1/1000)",
+          "concepts": ["prefixes", "units"]
+        }
+      ]
+    },
+
+    {
+      "id": "1.3",
+      "topic": "Making measurements",
+      "title": "Density",
+      "intro": "Compare materials by how much mass fits in a given volume.",
+      "physics_target": "density formula, comparing densities",
+      "language_target": "comparative and superlative adjectives",
+      "tasks": [
+        {
+          "id": "1.3.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What does density measure?",
+          "options": [
+            "How heavy an object is",
+            "How much mass is in a given volume",
+            "How big an object is",
+            "How fast an object moves"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Density = mass ÷ volume.",
+          "feedback_wrong": "Density tells us how much mass fits in a certain volume.",
+          "concepts": ["density"]
+        },
+        {
+          "id": "1.3.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "The density of water is 1 g/cm³. How is this read aloud?",
+          "options": [
+            "one gram per centimetre cubed",
+            "one centimetre per gram",
+            "one gram and one centimetre",
+            "one gram times centimetre cubed"
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. The slash / means 'per' = 'for each'.",
+          "feedback_wrong": "The slash means 'per'. g/cm³ = 'gram per centimetre cubed'.",
+          "language_tip": "'per' = 'for each' (used in km/h, m/s, g/cm³)",
+          "concepts": ["units", "reading_units"]
+        },
+        {
+          "id": "1.3.3",
+          "type": "fill_blank",
+          "difficulty": 1,
+          "prompt_template": "Steel is ___ than aluminium. (comparative of 'dense')",
+          "correct_answers": ["denser"],
+          "feedback_right": "Correct. Comparative: dense → denser.",
+          "feedback_wrong": "Short adjective + '-er': dense → denser.",
+          "language_tip": "Comparative: short adjective + '-er' + 'than'",
+          "concepts": ["comparatives"]
+        },
+        {
+          "id": "1.3.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Osmium is the ___ metal in the Periodic Table. (superlative of 'dense')",
+          "correct_answers": ["densest"],
+          "feedback_right": "Correct. Superlative: dense → densest.",
+          "feedback_wrong": "Superlative: short adjective + '-est'.",
+          "language_tip": "Superlative: 'the' + adjective + '-est'",
+          "concepts": ["superlatives"]
+        },
+        {
+          "id": "1.3.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Densities (kg/m³): lead 11300, aluminium 2700, copper 8900, tin 7300. Steel = 7700. Sort:",
+          "items": ["lead", "aluminium", "copper", "tin"],
+          "categories": ["Denser than steel", "Less dense than steel"],
+          "correct_mapping": {
+            "lead": "Denser than steel",
+            "copper": "Denser than steel",
+            "aluminium": "Less dense than steel",
+            "tin": "Less dense than steel"
+          },
+          "concepts": ["density", "comparatives"]
+        },
+        {
+          "id": "1.3.6",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Which is the densest? lead 11300, gold 19300, platinum 21400, silver 10500 (kg/m³)",
+          "options": ["lead", "gold", "platinum", "silver"],
+          "correct_index": 2,
+          "feedback_right": "Correct. Platinum has the highest value: 21400.",
+          "feedback_wrong": "'Densest' = highest density. Look for the biggest number.",
+          "concepts": ["superlatives", "density"]
+        },
+        {
+          "id": "1.3.7",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match the adjective with its comparative form:",
+          "left_items": ["dense", "heavy", "high", "low"],
+          "right_items": ["lower", "denser", "higher", "heavier"],
+          "correct_pairs": [[0,1],[1,3],[2,2],[3,0]],
+          "concepts": ["comparatives"]
+        },
+        {
+          "id": "1.3.8",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Gold (19300) is denser ___ silver (10500).",
+          "correct_answers": ["than"],
+          "feedback_right": "Correct. Comparative always uses 'than'.",
+          "feedback_wrong": "After a comparative form, always use 'than'.",
+          "language_tip": "Comparative pattern: X is [adj+er] than Y",
+          "concepts": ["comparatives"]
+        },
+        {
+          "id": "1.3.9",
+          "type": "ordering",
+          "difficulty": 3,
+          "prompt": "Put the steps to measure density of a stone in order:",
+          "items": [
+            "Find the mass of the stone on a balance",
+            "Fill a measuring cylinder halfway with water",
+            "Record the initial volume of water",
+            "Put the stone in the water",
+            "Record the new volume",
+            "Calculate volume = new volume − initial volume"
+          ],
+          "correct_order": [0, 1, 2, 3, 4, 5],
+          "concepts": ["experiment", "density"]
+        },
+        {
+          "id": "1.3.10",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "A block has mass 200 g and volume 50 cm³. What is its density?",
+          "options": ["4 g/cm³", "10 g/cm³", "150 g/cm³", "250 g/cm³"],
+          "correct_index": 0,
+          "feedback_right": "Correct. Density = 200 ÷ 50 = 4 g/cm³.",
+          "feedback_wrong": "Density = mass ÷ volume = 200 ÷ 50.",
+          "concepts": ["density", "calculation"]
+        },
+        {
+          "id": "1.3.11",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "Ice floats on water because ice is ___ dense than water.",
+          "correct_answers": ["less"],
+          "feedback_right": "Correct. 'Less dense' = lower density. Less dense things float.",
+          "feedback_wrong": "Opposite of 'more dense' is 'less dense'.",
+          "language_tip": "Comparison: 'more X' / 'less X' for longer adjectives",
+          "concepts": ["density", "comparatives"]
+        },
+        {
+          "id": "1.3.12",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "100 cm³ of mercury has a mass of 1360 g. What is its density?",
+          "options": ["13.6 g/cm³", "1.36 g/cm³", "136 g/cm³", "1360 g/cm³"],
+          "correct_index": 0,
+          "feedback_right": "Correct. 1360 ÷ 100 = 13.6 g/cm³.",
+          "feedback_wrong": "Density = mass ÷ volume = 1360 ÷ 100.",
+          "concepts": ["density", "calculation"]
+        }
+      ]
+    },
+
+    {
+      "id": "2.1",
+      "topic": "Describing motion",
+      "title": "Movement vocabulary",
+      "intro": "Learn the key words used to describe how things move.",
+      "physics_target": "motion terminology",
+      "language_target": "defining relative clauses (which/that)",
+      "tasks": [
+        {
+          "id": "2.1.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each word with its meaning:",
+          "left_items": ["speed", "distance", "motion", "metre"],
+          "right_items": [
+            "another word for 'movement'",
+            "how fast something is moving",
+            "a unit of distance",
+            "how far something has moved"
+          ],
+          "correct_pairs": [[0,1],[1,3],[2,0],[3,2]],
+          "concepts": ["motion_vocab"]
+        },
+        {
+          "id": "2.1.2",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each verb with its meaning:",
+          "left_items": ["accelerate", "decelerate", "calculate"],
+          "right_items": ["to slow down", "to work out a numerical value", "to go faster"],
+          "correct_pairs": [[0,2],[1,0],[2,1]],
+          "concepts": ["motion_verbs"]
+        },
+        {
+          "id": "2.1.3",
+          "type": "fill_blank",
+          "difficulty": 1,
+          "prompt_template": "An equation is a formula ___ shows how quantities are related.",
+          "correct_answers": ["that", "which"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Defining clause: noun + that/which + verb.",
+          "language_tip": "Use 'that' or 'which' to define what something is",
+          "concepts": ["defining_clauses"]
+        },
+        {
+          "id": "2.1.4",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Which sentence is a correct definition?",
+          "options": [
+            "Speed is a noun which tells us how fast something is moving.",
+            "Speed which is a noun tells how fast moving.",
+            "A noun speed that tells fast moving.",
+            "Speed it is fast moving thing."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Pattern: [term] is a [class] which [function].",
+          "feedback_wrong": "Definitions follow: [term] is a [class] which/that [function].",
+          "concepts": ["defining_clauses"]
+        },
+        {
+          "id": "2.1.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort these words by word class:",
+          "items": ["speed", "calculate", "distance", "accelerate", "metre", "decelerate"],
+          "categories": ["Noun", "Verb"],
+          "correct_mapping": {
+            "speed": "Noun",
+            "distance": "Noun",
+            "metre": "Noun",
+            "calculate": "Verb",
+            "accelerate": "Verb",
+            "decelerate": "Verb"
+          },
+          "concepts": ["word_classes"]
+        },
+        {
+          "id": "2.1.6",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "A car is 'decelerating'. What does this mean?",
+          "options": ["Moving at constant speed", "Slowing down", "Speeding up", "Going backwards"],
+          "correct_index": 1,
+          "feedback_right": "Correct. Decelerate = slow down.",
+          "feedback_wrong": "Prefix 'de-' often means 'down/reduce'.",
+          "language_tip": "Prefix 'de-' = reverse or reduce",
+          "concepts": ["motion_verbs", "prefixes"]
+        },
+        {
+          "id": "2.1.7",
+          "type": "matching",
+          "difficulty": 3,
+          "prompt": "Match the description to the type of motion:",
+          "left_items": [
+            "Travelling at 30 m/s steadily",
+            "Speed changing from 40 to 20 m/s",
+            "Speed changing from 0 to 20 m/s"
+          ],
+          "right_items": ["accelerating", "constant speed", "decelerating"],
+          "correct_pairs": [[0,1],[1,2],[2,0]],
+          "concepts": ["motion_types"]
+        }
+      ]
+    },
+
+    {
+      "id": "2.2",
+      "topic": "Describing motion",
+      "title": "Distance-time graphs",
+      "intro": "Read graphs that show how distance changes over time.",
+      "physics_target": "interpreting distance-time graphs, gradient = speed",
+      "language_target": "present continuous vs present simple",
+      "tasks": [
+        {
+          "id": "2.2.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "On a distance-time graph, what does the gradient (slope) tell us?",
+          "options": ["distance", "time", "speed", "acceleration"],
+          "correct_index": 2,
+          "feedback_right": "Correct. Gradient on a distance-time graph = speed.",
+          "feedback_wrong": "Gradient = change in distance ÷ change in time = speed.",
+          "concepts": ["graphs", "gradient"]
+        },
+        {
+          "id": "2.2.2",
+          "type": "graph_choice",
+          "difficulty": 2,
+          "image_url": "graphs/dt_horizontal.svg",
+          "image_description": "Distance-time graph with a horizontal line at d=50m from t=0 to t=10s",
+          "prompt": "What does this graph show?",
+          "options": [
+            "The object is moving at constant speed",
+            "The object is stationary (not moving)",
+            "The object is accelerating",
+            "The object is decelerating"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Horizontal line = distance doesn't change = stationary.",
+          "feedback_wrong": "If distance doesn't change with time, the object isn't moving.",
+          "concepts": ["graphs", "stationary"]
+        },
+        {
+          "id": "2.2.3",
+          "type": "graph_choice",
+          "difficulty": 2,
+          "image_url": "graphs/dt_straight.svg",
+          "image_description": "Distance-time graph with a straight diagonal line from (0,0) to (10,50)",
+          "prompt": "What does this graph show?",
+          "options": [
+            "Constant speed",
+            "Stationary",
+            "Acceleration",
+            "Deceleration"
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Straight line = constant gradient = constant speed.",
+          "feedback_wrong": "Straight diagonal line means the speed is not changing.",
+          "concepts": ["graphs", "constant_speed"]
+        },
+        {
+          "id": "2.2.4",
+          "type": "graph_choice",
+          "difficulty": 3,
+          "image_url": "graphs/dt_curve_up.svg",
+          "image_description": "Distance-time graph with an upward-curving line (gradient increasing)",
+          "prompt": "What does this graph show?",
+          "options": [
+            "Constant speed",
+            "The object is accelerating",
+            "The object is decelerating",
+            "The object is stationary"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Curve getting steeper = speed increasing = accelerating.",
+          "feedback_wrong": "Steeper gradient means faster speed. Curve gets steeper → speed grows.",
+          "concepts": ["graphs", "acceleration"]
+        },
+        {
+          "id": "2.2.5",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Look at this graph! The car ___ at constant speed right now. (present continuous of 'travel')",
+          "correct_answers": ["is travelling", "is moving"],
+          "feedback_right": "Correct. Present continuous = action happening now.",
+          "feedback_wrong": "Action happening NOW → use 'is/are + verb-ing'.",
+          "language_tip": "Present continuous: am/is/are + verb-ing",
+          "concepts": ["present_continuous"]
+        },
+        {
+          "id": "2.2.6",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A horizontal line on a distance-time graph ___ that the object is not moving. (present simple of 'mean')",
+          "correct_answers": ["means"],
+          "feedback_right": "Correct. We use present simple for general facts.",
+          "feedback_wrong": "General fact / rule → use present simple. 3rd person: verb + 's'.",
+          "language_tip": "General truths use present simple",
+          "concepts": ["present_simple"]
+        }
+      ]
+    },
+
+    {
+      "id": "2.3",
+      "topic": "Describing motion",
+      "title": "Speed calculations",
+      "intro": "Calculate speed, distance and time using the speed formula.",
+      "physics_target": "speed = distance / time",
+      "language_target": "if-conditional sentences",
+      "tasks": [
+        {
+          "id": "2.3.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the formula for speed?",
+          "options": [
+            "speed = distance × time",
+            "speed = distance ÷ time",
+            "speed = time ÷ distance",
+            "speed = distance + time"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Speed = distance / time.",
+          "feedback_wrong": "Speed = how much distance per unit of time = distance ÷ time.",
+          "concepts": ["speed_formula"]
+        },
+        {
+          "id": "2.3.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "A car travels 100 m in 5 s. What is its speed?",
+          "options": ["20 m/s", "50 m/s", "500 m/s", "5 m/s"],
+          "correct_index": 0,
+          "feedback_right": "Correct. 100 ÷ 5 = 20 m/s.",
+          "feedback_wrong": "speed = distance ÷ time = 100 ÷ 5.",
+          "concepts": ["speed_calculation"]
+        },
+        {
+          "id": "2.3.3",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "A runner covers 200 m in 25 s. Find the speed.",
+          "options": ["4 m/s", "8 m/s", "0.125 m/s", "225 m/s"],
+          "correct_index": 1,
+          "feedback_right": "Correct. 200 ÷ 25 = 8 m/s.",
+          "feedback_wrong": "speed = 200 ÷ 25.",
+          "concepts": ["speed_calculation"]
+        },
+        {
+          "id": "2.3.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "If you double the distance and keep the time the same, the speed will ___. (verb)",
+          "correct_answers": ["double"],
+          "feedback_right": "Correct. Speed and distance are directly proportional.",
+          "feedback_wrong": "If distance × 2, then speed × 2 (same time).",
+          "language_tip": "First conditional: If + present, ... will + verb",
+          "concepts": ["first_conditional", "proportional"]
+        },
+        {
+          "id": "2.3.5",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "If a bike travels 60 m in 10 s, its speed ___ 6 m/s. (verb 'be')",
+          "correct_answers": ["is", "will be"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Present statement or future result both work here.",
+          "concepts": ["first_conditional"]
+        },
+        {
+          "id": "2.3.6",
+          "type": "ordering",
+          "difficulty": 3,
+          "prompt": "Put these in order to solve: 'A car travels 240 m in 12 s. Find the speed.'",
+          "items": [
+            "Identify what is given: distance = 240 m, time = 12 s",
+            "Choose the formula: speed = distance ÷ time",
+            "Substitute the values: speed = 240 ÷ 12",
+            "Calculate the answer: speed = 20 m/s"
+          ],
+          "correct_order": [0, 1, 2, 3],
+          "concepts": ["problem_solving"]
+        },
+        {
+          "id": "2.3.7",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "A train travels at 30 m/s for 60 s. What distance does it cover?",
+          "options": ["0.5 m", "90 m", "1800 m", "30 m"],
+          "correct_index": 2,
+          "feedback_right": "Correct. distance = speed × time = 30 × 60 = 1800 m.",
+          "feedback_wrong": "Rearrange: distance = speed × time.",
+          "concepts": ["speed_calculation", "rearranging"]
+        }
+      ]
+    },
+
+    {
+      "id": "2.5",
+      "topic": "Describing motion",
+      "title": "Acceleration",
+      "intro": "Acceleration tells us how quickly speed changes.",
+      "physics_target": "acceleration = change in velocity / time",
+      "language_target": "change verbs (increase, decrease, rise, fall)",
+      "tasks": [
+        {
+          "id": "2.5.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What does acceleration measure?",
+          "options": [
+            "How fast something is moving",
+            "How quickly speed is changing",
+            "How far something has moved",
+            "How heavy something is"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Acceleration = rate of change of speed.",
+          "feedback_wrong": "Speed = how fast. Acceleration = how fast the speed CHANGES.",
+          "concepts": ["acceleration"]
+        },
+        {
+          "id": "2.5.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the unit of acceleration?",
+          "options": ["m/s", "m/s²", "s/m", "kg/m"],
+          "correct_index": 1,
+          "feedback_right": "Correct. m/s² = metres per second per second.",
+          "feedback_wrong": "Speed change (m/s) per second → m/s ÷ s = m/s².",
+          "concepts": ["units", "acceleration"]
+        },
+        {
+          "id": "2.5.3",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match verbs with their opposites:",
+          "left_items": ["increase", "rise", "speed up", "accelerate"],
+          "right_items": ["fall", "decelerate", "decrease", "slow down"],
+          "correct_pairs": [[0,2],[1,0],[2,3],[3,1]],
+          "concepts": ["change_verbs"]
+        },
+        {
+          "id": "2.5.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "When a car speeds up, its velocity ___. (synonym of 'increases')",
+          "correct_answers": ["rises", "grows"],
+          "feedback_right": "Correct. Several verbs mean 'increase'.",
+          "feedback_wrong": "Synonyms of 'increase': rise, grow, go up.",
+          "language_tip": "increase = rise = grow = go up",
+          "concepts": ["change_verbs"]
+        },
+        {
+          "id": "2.5.5",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "A car's speed changes from 10 m/s to 30 m/s in 5 s. What is the acceleration?",
+          "options": ["2 m/s²", "4 m/s²", "8 m/s²", "20 m/s²"],
+          "correct_index": 1,
+          "feedback_right": "Correct. (30 − 10) ÷ 5 = 20 ÷ 5 = 4 m/s².",
+          "feedback_wrong": "acceleration = (final − initial) ÷ time = (30 − 10) ÷ 5.",
+          "concepts": ["acceleration_calculation"]
+        },
+        {
+          "id": "2.5.6",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Classify each situation:",
+          "items": [
+            "speed changes from 5 to 20 m/s",
+            "speed changes from 30 to 10 m/s",
+            "speed stays at 15 m/s"
+          ],
+          "categories": ["Acceleration", "Deceleration", "No change"],
+          "correct_mapping": {
+            "speed changes from 5 to 20 m/s": "Acceleration",
+            "speed changes from 30 to 10 m/s": "Deceleration",
+            "speed stays at 15 m/s": "No change"
+          },
+          "concepts": ["acceleration_types"]
+        },
+        {
+          "id": "2.5.7",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "If the brakes are applied, the speed ___. (verb meaning to go down)",
+          "correct_answers": ["decreases", "falls", "drops"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Brakes → slowing → speed decreases / falls / drops.",
+          "concepts": ["change_verbs", "first_conditional"]
+        }
+      ]
+    },
+
+    {
+      "id": "3.1",
+      "topic": "Forces",
+      "title": "Mass and weight",
+      "intro": "Mass and weight sound similar but mean different things.",
+      "physics_target": "distinguishing mass and weight",
+      "language_target": "contrast connectors (but, while, whereas)",
+      "tasks": [
+        {
+          "id": "3.1.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is mass?",
+          "options": [
+            "The amount of matter in an object",
+            "The pull of gravity on an object",
+            "The size of an object",
+            "The speed of an object"
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Mass = amount of matter. Measured in kilograms.",
+          "feedback_wrong": "Mass = matter. Weight = pull of gravity.",
+          "concepts": ["mass"]
+        },
+        {
+          "id": "3.1.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is weight?",
+          "options": [
+            "The amount of matter in an object",
+            "The force of gravity acting on an object",
+            "How big something is",
+            "The volume of an object"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Weight is a force, measured in newtons (N).",
+          "feedback_wrong": "Weight = gravity pulling on the object's mass.",
+          "concepts": ["weight"]
+        },
+        {
+          "id": "3.1.3",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort these properties:",
+          "items": [
+            "measured in kilograms",
+            "measured in newtons",
+            "changes on the Moon",
+            "stays the same everywhere",
+            "is a force"
+          ],
+          "categories": ["Mass", "Weight"],
+          "correct_mapping": {
+            "measured in kilograms": "Mass",
+            "stays the same everywhere": "Mass",
+            "measured in newtons": "Weight",
+            "changes on the Moon": "Weight",
+            "is a force": "Weight"
+          },
+          "concepts": ["mass", "weight"]
+        },
+        {
+          "id": "3.1.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Mass is measured in kilograms, ___ weight is measured in newtons. (contrast word)",
+          "correct_answers": ["but", "while", "whereas"],
+          "feedback_right": "Correct. All three contrast connectors work here.",
+          "feedback_wrong": "Use 'but', 'while', or 'whereas' to show contrast.",
+          "language_tip": "Contrast: but / while / whereas (link two opposite ideas)",
+          "concepts": ["contrast_connectors"]
+        },
+        {
+          "id": "3.1.5",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Which sentence correctly contrasts mass and weight?",
+          "options": [
+            "Mass stays the same anywhere, whereas weight changes with gravity.",
+            "Mass stays the same anywhere and weight also stays the same.",
+            "Mass changes with gravity, while weight stays the same.",
+            "Mass it is the same as weight."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. 'Whereas' shows the contrast.",
+          "feedback_wrong": "Mass = constant. Weight = depends on gravity.",
+          "concepts": ["contrast_connectors", "mass_weight"]
+        },
+        {
+          "id": "3.1.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "On Earth, g = 10 N/kg. What is the weight of a 5 kg object?",
+          "options": ["0.5 N", "5 N", "15 N", "50 N"],
+          "correct_index": 3,
+          "feedback_right": "Correct. Weight = mass × g = 5 × 10 = 50 N.",
+          "feedback_wrong": "Weight = mass × gravitational field strength = 5 × 10.",
+          "concepts": ["weight_calculation"]
+        },
+        {
+          "id": "3.1.7",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "An astronaut has the same mass on the Moon, ___ his weight is much less. (contrast word)",
+          "correct_answers": ["but", "however", "while", "whereas"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Contrast: but / however / while / whereas.",
+          "concepts": ["contrast_connectors", "mass_weight"]
+        }
+      ]
+    },
+
+    {
+      "id": "3.2",
+      "topic": "Forces",
+      "title": "Types of force",
+      "intro": "Forces have many names — friction, weight, tension, thrust...",
+      "physics_target": "naming and recognising force types",
+      "language_target": "passive voice for descriptions",
+      "tasks": [
+        {
+          "id": "3.2.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each force with its description:",
+          "left_items": ["friction", "weight", "tension", "thrust"],
+          "right_items": [
+            "the pulling force in a rope or string",
+            "the pull of gravity on an object",
+            "the pushing force from an engine",
+            "the force that slows things sliding"
+          ],
+          "correct_pairs": [[0,3],[1,1],[2,0],[3,2]],
+          "concepts": ["force_types"]
+        },
+        {
+          "id": "3.2.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the unit of force?",
+          "options": ["kilogram (kg)", "newton (N)", "metre (m)", "joule (J)"],
+          "correct_index": 1,
+          "feedback_right": "Correct. Force is measured in newtons.",
+          "feedback_wrong": "kg = mass, m = length, J = energy. Force = newtons.",
+          "concepts": ["units", "force"]
+        },
+        {
+          "id": "3.2.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Force ___ measured in newtons. (passive: present simple of 'measure')",
+          "correct_answers": ["is"],
+          "feedback_right": "Correct. Passive: is/are + past participle.",
+          "feedback_wrong": "Passive present: subject + is/are + past participle. 'Force is measured'.",
+          "language_tip": "Passive: is/are + verb-ed (past participle)",
+          "concepts": ["passive_voice"]
+        },
+        {
+          "id": "3.2.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Newton's laws ___ used to describe forces. (passive: present simple of 'use')",
+          "correct_answers": ["are"],
+          "feedback_right": "Correct. Plural subject → 'are'.",
+          "feedback_wrong": "Plural + passive: subject + 'are' + past participle.",
+          "concepts": ["passive_voice"]
+        },
+        {
+          "id": "3.2.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Sort these forces:",
+          "items": ["friction", "weight", "thrust", "air resistance", "tension"],
+          "categories": ["Contact force", "Non-contact force"],
+          "correct_mapping": {
+            "friction": "Contact force",
+            "thrust": "Contact force",
+            "air resistance": "Contact force",
+            "tension": "Contact force",
+            "weight": "Non-contact force"
+          },
+          "concepts": ["force_types"]
+        },
+        {
+          "id": "3.2.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Which sentence uses the passive correctly?",
+          "options": [
+            "The book is pulled down by gravity.",
+            "Gravity pulls down the book is.",
+            "The book pulls down gravity.",
+            "Gravity is the book pulled down."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Passive: thing + is/are + past participle + by + agent.",
+          "feedback_wrong": "Passive structure: [object] is/are [past participle] (by [agent]).",
+          "concepts": ["passive_voice"]
+        }
+      ]
+    },
+
+    {
+      "id": "3.4",
+      "topic": "Forces",
+      "title": "Pressure",
+      "intro": "Pressure depends on force AND the area it acts on.",
+      "physics_target": "pressure = force / area",
+      "language_target": "first conditional (if + present, will + verb)",
+      "tasks": [
+        {
+          "id": "3.4.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the formula for pressure?",
+          "options": [
+            "pressure = force × area",
+            "pressure = force ÷ area",
+            "pressure = area ÷ force",
+            "pressure = force + area"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Pressure = force / area.",
+          "feedback_wrong": "Pressure = force per unit area = force ÷ area.",
+          "concepts": ["pressure_formula"]
+        },
+        {
+          "id": "3.4.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "Unit of pressure?",
+          "options": ["N", "N/m²", "m²", "kg/m"],
+          "correct_index": 1,
+          "feedback_right": "Correct. N/m² (also called pascal, Pa).",
+          "feedback_wrong": "Pressure = force (N) ÷ area (m²) = N/m².",
+          "concepts": ["units", "pressure"]
+        },
+        {
+          "id": "3.4.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "If you stand on one foot, the pressure ___ increase. (modal verb)",
+          "correct_answers": ["will"],
+          "feedback_right": "Correct. First conditional: if + present, ... WILL + verb.",
+          "feedback_wrong": "First conditional structure: If [present], [will + verb].",
+          "language_tip": "1st conditional: If + present simple, ... will + verb",
+          "concepts": ["first_conditional"]
+        },
+        {
+          "id": "3.4.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "If the area is smaller, the pressure ___ greater. (will + verb 'be')",
+          "correct_answers": ["will be"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "First conditional: If [present], [will + verb].",
+          "concepts": ["first_conditional", "pressure"]
+        },
+        {
+          "id": "3.4.5",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "A 200 N force acts on an area of 4 m². What is the pressure?",
+          "options": ["50 N/m²", "800 N/m²", "0.02 N/m²", "204 N/m²"],
+          "correct_index": 0,
+          "feedback_right": "Correct. 200 ÷ 4 = 50 N/m².",
+          "feedback_wrong": "Pressure = force ÷ area = 200 ÷ 4.",
+          "concepts": ["pressure_calculation"]
+        },
+        {
+          "id": "3.4.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Why does a sharp knife cut better than a blunt one?",
+          "options": [
+            "It has a smaller area, so the pressure is higher.",
+            "It has a larger area, so the pressure is higher.",
+            "It has more force, so the pressure is lower.",
+            "It is made of a different metal."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Same force, smaller area → higher pressure.",
+          "feedback_wrong": "Pressure = force ÷ area. Smaller area → bigger pressure.",
+          "concepts": ["pressure", "application"]
+        },
+        {
+          "id": "3.4.7",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "If a man stands on a board with many cans, the pressure on each can ___ small. (will + 'be')",
+          "correct_answers": ["will be"],
+          "feedback_right": "Correct. Force is spread over a larger total area.",
+          "feedback_wrong": "Many cans = larger total area → smaller pressure on each.",
+          "concepts": ["first_conditional", "pressure"]
+        }
+      ]
+    },
+
+    {
+      "id": "4.1",
+      "topic": "Energy resources",
+      "title": "Forms of energy",
+      "intro": "Energy comes in many forms — kinetic, potential, thermal...",
+      "physics_target": "naming and recognising forms of energy",
+      "language_target": "cause and effect (because, so, therefore)",
+      "tasks": [
+        {
+          "id": "4.1.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match the form of energy to its description:",
+          "left_items": ["kinetic", "gravitational potential", "thermal", "chemical"],
+          "right_items": [
+            "energy stored in food and fuels",
+            "energy of moving objects",
+            "energy due to temperature",
+            "energy of an object lifted up"
+          ],
+          "correct_pairs": [[0,1],[1,3],[2,2],[3,0]],
+          "concepts": ["energy_forms"]
+        },
+        {
+          "id": "4.1.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "A moving car has what kind of energy?",
+          "options": ["chemical", "kinetic", "thermal", "elastic"],
+          "correct_index": 1,
+          "feedback_right": "Correct. Kinetic = energy of motion.",
+          "feedback_wrong": "Anything moving has KINETIC energy.",
+          "concepts": ["kinetic_energy"]
+        },
+        {
+          "id": "4.1.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A ball on a high shelf has gravitational potential energy ___ it has been lifted up. (cause connector)",
+          "correct_answers": ["because"],
+          "feedback_right": "Correct. 'Because' introduces a reason.",
+          "feedback_wrong": "Use 'because' to give a reason / cause.",
+          "language_tip": "because = introduces a reason (cause)",
+          "concepts": ["cause_effect"]
+        },
+        {
+          "id": "4.1.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "The wind is moving, ___ it has kinetic energy. (effect connector)",
+          "correct_answers": ["so", "therefore"],
+          "feedback_right": "Correct. 'So' / 'therefore' introduce a result.",
+          "feedback_wrong": "Use 'so' or 'therefore' to introduce an effect / result.",
+          "language_tip": "so / therefore = introduces a result (effect)",
+          "concepts": ["cause_effect"]
+        },
+        {
+          "id": "4.1.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Classify each statement:",
+          "items": [
+            "A stretched spring has elastic potential energy",
+            "A burning candle has chemical energy",
+            "Hot tea has thermal energy",
+            "A flying bird has kinetic energy"
+          ],
+          "categories": ["Has potential energy", "Has kinetic energy", "Has thermal energy", "Has chemical energy"],
+          "correct_mapping": {
+            "A stretched spring has elastic potential energy": "Has potential energy",
+            "A burning candle has chemical energy": "Has chemical energy",
+            "Hot tea has thermal energy": "Has thermal energy",
+            "A flying bird has kinetic energy": "Has kinetic energy"
+          },
+          "concepts": ["energy_forms"]
+        },
+        {
+          "id": "4.1.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Choose the correct cause-and-effect sentence:",
+          "options": [
+            "The water is hot, therefore it has thermal energy.",
+            "The water is hot because it has thermal energy.",
+            "Therefore the water is hot, it has thermal energy.",
+            "Because the water has thermal energy therefore it is hot."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Cause comes before 'therefore', then the effect.",
+          "feedback_wrong": "[Cause], therefore [effect]. Or: [Effect] because [cause].",
+          "concepts": ["cause_effect"]
+        }
+      ]
+    },
+
+    {
+      "id": "4.2",
+      "topic": "Energy resources",
+      "title": "Energy transfer and conservation",
+      "intro": "Energy cannot be created or destroyed — only changed from one form to another.",
+      "physics_target": "energy transfer, conservation",
+      "language_target": "transformation verbs (transfer, convert, change into)",
+      "tasks": [
+        {
+          "id": "4.2.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the law of conservation of energy?",
+          "options": [
+            "Energy can be created but not destroyed",
+            "Energy can be destroyed but not created",
+            "Energy cannot be created or destroyed, only transferred",
+            "Energy always increases over time"
+          ],
+          "correct_index": 2,
+          "feedback_right": "Correct. Total energy stays the same — it just changes form.",
+          "feedback_wrong": "Conservation = total energy is constant. It changes form, not amount.",
+          "concepts": ["conservation"]
+        },
+        {
+          "id": "4.2.2",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match the device to the main energy transfer:",
+          "left_items": ["electric kettle", "battery", "solar panel", "torch (flashlight)"],
+          "right_items": [
+            "chemical → electrical",
+            "light → electrical",
+            "electrical → thermal",
+            "electrical → light"
+          ],
+          "correct_pairs": [[0,2],[1,0],[2,1],[3,3]],
+          "concepts": ["energy_transfer"]
+        },
+        {
+          "id": "4.2.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A kettle ___ electrical energy into thermal energy. (verb 'convert', present simple)",
+          "correct_answers": ["converts", "changes", "transforms"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Verbs: convert, change, transform.",
+          "language_tip": "convert / change / transform X INTO Y",
+          "concepts": ["transformation_verbs"]
+        },
+        {
+          "id": "4.2.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "In a solar panel, light energy is ___ into electrical energy. (passive past participle of 'transfer')",
+          "correct_answers": ["transferred", "converted", "changed"],
+          "feedback_right": "Correct. Passive form: 'is transferred into'.",
+          "feedback_wrong": "Passive: is + past participle. transfer → transferred.",
+          "concepts": ["passive_voice", "transformation_verbs"]
+        },
+        {
+          "id": "4.2.5",
+          "type": "ordering",
+          "difficulty": 3,
+          "prompt": "Put the energy chain for a falling ball in order:",
+          "items": [
+            "Gravitational potential energy (at top)",
+            "Kinetic energy (while falling)",
+            "Thermal + sound energy (after impact)"
+          ],
+          "correct_order": [0, 1, 2],
+          "concepts": ["energy_chain"]
+        },
+        {
+          "id": "4.2.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "A 100 J of chemical energy in fuel converts to 30 J of kinetic energy. Where did the rest go?",
+          "options": [
+            "It was destroyed",
+            "It became thermal and sound energy",
+            "It became extra mass",
+            "It disappeared into space"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. 'Lost' energy is usually wasted as heat and sound.",
+          "feedback_wrong": "Energy is never destroyed — usually it becomes thermal energy (heat).",
+          "concepts": ["conservation", "efficiency"]
+        }
+      ]
+    },
+
+    {
+      "id": "5.1",
+      "topic": "Thermal physics",
+      "title": "Heat and temperature",
+      "intro": "Heat and temperature are not the same thing!",
+      "physics_target": "distinguishing heat and temperature",
+      "language_target": "scientific vs everyday language",
+      "tasks": [
+        {
+          "id": "5.1.1",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What does temperature measure?",
+          "options": [
+            "Total energy of particles",
+            "Average energy of particles",
+            "Number of particles",
+            "Size of particles"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Temperature = AVERAGE kinetic energy of particles.",
+          "feedback_wrong": "Temperature = average energy. Heat = total energy.",
+          "concepts": ["temperature"]
+        },
+        {
+          "id": "5.1.2",
+          "type": "single_choice",
+          "difficulty": 1,
+          "prompt": "What is the SI unit of temperature?",
+          "options": ["Celsius (°C)", "Fahrenheit (°F)", "kelvin (K)", "newton (N)"],
+          "correct_index": 2,
+          "feedback_right": "Correct. SI unit = kelvin. 0 K = absolute zero.",
+          "feedback_wrong": "Celsius is common but the SI unit is the kelvin.",
+          "concepts": ["units", "temperature"]
+        },
+        {
+          "id": "5.1.3",
+          "type": "matching",
+          "difficulty": 2,
+          "prompt": "Match the everyday word to the scientific word:",
+          "left_items": ["hot", "freezing", "warmth", "burning"],
+          "right_items": [
+            "high temperature",
+            "very high temperature",
+            "thermal energy",
+            "very low temperature"
+          ],
+          "correct_pairs": [[0,0],[1,3],[2,2],[3,1]],
+          "concepts": ["scientific_language"]
+        },
+        {
+          "id": "5.1.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "When you heat water, the average kinetic energy of the particles ___. (verb)",
+          "correct_answers": ["increases", "rises", "grows"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Heating → particles move faster → kinetic energy increases.",
+          "concepts": ["kinetic_theory"]
+        },
+        {
+          "id": "5.1.5",
+          "type": "classification",
+          "difficulty": 2,
+          "prompt": "Classify the statements:",
+          "items": [
+            "Measured in kelvin or celsius",
+            "Measured in joules",
+            "A type of energy transfer",
+            "Average kinetic energy of particles"
+          ],
+          "categories": ["About temperature", "About heat"],
+          "correct_mapping": {
+            "Measured in kelvin or celsius": "About temperature",
+            "Average kinetic energy of particles": "About temperature",
+            "Measured in joules": "About heat",
+            "A type of energy transfer": "About heat"
+          },
+          "concepts": ["heat", "temperature"]
+        },
+        {
+          "id": "5.1.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Which scientific sentence is correct?",
+          "options": [
+            "The cup is warmer because thermal energy was transferred to it.",
+            "The cup is warmer because it has more cold.",
+            "The cup is warmer because temperature went into it.",
+            "The cup is warmer because heat made cold leave."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Thermal energy is TRANSFERRED — there is no 'cold'.",
+          "feedback_wrong": "Cold isn't a thing — it's the absence of thermal energy.",
+          "concepts": ["scientific_language", "heat"]
+        }
+      ]
+    },
+
+    {
+      "id": "5.2",
+      "topic": "Thermal physics",
+      "title": "Kinetic theory of matter",
+      "intro": "All matter is made of tiny particles in constant motion.",
+      "physics_target": "states of matter, particle behaviour",
+      "language_target": "explanation with 'because' and 'so'",
+      "tasks": [
+        {
+          "id": "5.2.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match the state with particle behaviour:",
+          "left_items": ["solid", "liquid", "gas"],
+          "right_items": [
+            "particles move freely and quickly, far apart",
+            "particles vibrate in fixed positions",
+            "particles move around, close together"
+          ],
+          "correct_pairs": [[0,1],[1,2],[2,0]],
+          "concepts": ["states_of_matter"]
+        },
+        {
+          "id": "5.2.2",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Why do gases fill any container?",
+          "options": [
+            "Because their particles are very large",
+            "Because their particles move freely in all directions",
+            "Because gases are heavier than air",
+            "Because gases have no particles"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Free-moving particles spread out to fill the space.",
+          "feedback_wrong": "Gas particles move freely → they spread out everywhere.",
+          "concepts": ["kinetic_theory", "gas"]
+        },
+        {
+          "id": "5.2.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "A solid has a fixed shape ___ its particles cannot move from their positions. (cause word)",
+          "correct_answers": ["because"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Reason → 'because'.",
+          "concepts": ["cause_effect", "states_of_matter"]
+        },
+        {
+          "id": "5.2.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Gas particles move freely, ___ a gas fills its container. (effect word)",
+          "correct_answers": ["so", "therefore"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Result → 'so' or 'therefore'.",
+          "concepts": ["cause_effect"]
+        },
+        {
+          "id": "5.2.5",
+          "type": "ordering",
+          "difficulty": 3,
+          "prompt": "Put these states in order of INCREASING particle energy:",
+          "items": ["Solid (cold)", "Liquid", "Gas"],
+          "correct_order": [0, 1, 2],
+          "concepts": ["kinetic_theory", "states_of_matter"]
+        },
+        {
+          "id": "5.2.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Choose the correct explanation:",
+          "options": [
+            "Ice melts because the particles gain energy and break out of fixed positions.",
+            "Ice melts because the particles get bigger.",
+            "Ice melts because new particles appear.",
+            "Ice melts because the particles disappear."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct. Heating gives particles enough energy to flow past each other.",
+          "feedback_wrong": "Heating → particles gain energy → they move enough to flow = liquid.",
+          "concepts": ["kinetic_theory", "melting"]
+        }
+      ]
+    },
+
+    {
+      "id": "6.1",
+      "topic": "Sound and waves",
+      "title": "Wave properties",
+      "intro": "Waves carry energy without carrying matter.",
+      "physics_target": "amplitude, wavelength, frequency, period",
+      "language_target": "definitions with 'is defined as'",
+      "tasks": [
+        {
+          "id": "6.1.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match each wave property with its meaning:",
+          "left_items": ["amplitude", "wavelength", "frequency", "period"],
+          "right_items": [
+            "time for one complete wave",
+            "the height of the wave from middle to top",
+            "number of waves per second",
+            "distance between two wave peaks"
+          ],
+          "correct_pairs": [[0,1],[1,3],[2,2],[3,0]],
+          "concepts": ["wave_properties"]
+        },
+        {
+          "id": "6.1.2",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match the quantity with its unit:",
+          "left_items": ["frequency", "wavelength", "period", "amplitude"],
+          "right_items": ["metre", "second", "metre", "hertz"],
+          "correct_pairs": [[0,3],[1,0],[2,1],[3,2]],
+          "concepts": ["units", "wave_properties"]
+        },
+        {
+          "id": "6.1.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Frequency ___ defined as the number of waves per second. (verb 'be')",
+          "correct_answers": ["is"],
+          "feedback_right": "Correct. Passive: 'is defined as'.",
+          "feedback_wrong": "Definitions: X IS defined as Y.",
+          "language_tip": "X is defined as Y = formal definition",
+          "concepts": ["passive_voice", "definitions"]
+        },
+        {
+          "id": "6.1.4",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Sound 1 has higher amplitude than sound 2. Sound 1 is...",
+          "options": [
+            "higher-pitched",
+            "lower-pitched",
+            "louder",
+            "quieter"
+          ],
+          "correct_index": 2,
+          "feedback_right": "Correct. Bigger amplitude = louder sound.",
+          "feedback_wrong": "Amplitude = loudness. Frequency = pitch.",
+          "concepts": ["sound", "amplitude"]
+        },
+        {
+          "id": "6.1.5",
+          "type": "single_choice",
+          "difficulty": 2,
+          "prompt": "Sound A has higher frequency than sound B. Sound A is...",
+          "options": [
+            "louder",
+            "quieter",
+            "higher-pitched",
+            "lower-pitched"
+          ],
+          "correct_index": 2,
+          "feedback_right": "Correct. Higher frequency = higher pitch.",
+          "feedback_wrong": "Frequency controls PITCH. Amplitude controls LOUDNESS.",
+          "concepts": ["sound", "frequency"]
+        },
+        {
+          "id": "6.1.6",
+          "type": "graph_choice",
+          "difficulty": 3,
+          "image_url": "graphs/wave_high_amp.svg",
+          "image_description": "Sine wave with large amplitude and 3 complete cycles in the time window",
+          "prompt": "Compared to a quieter sound at the same pitch, this wave has...",
+          "options": [
+            "the same amplitude",
+            "larger amplitude",
+            "smaller amplitude",
+            "higher frequency"
+          ],
+          "correct_index": 1,
+          "feedback_right": "Correct. Louder = bigger amplitude.",
+          "feedback_wrong": "Louder sound = bigger amplitude (taller wave).",
+          "concepts": ["sound", "graphs"]
+        },
+        {
+          "id": "6.1.7",
+          "type": "fill_blank",
+          "difficulty": 3,
+          "prompt_template": "The wavelength of a wave is ___ as the distance between two peaks. (passive: defined)",
+          "correct_answers": ["defined"],
+          "feedback_right": "Correct.",
+          "feedback_wrong": "Definitions use the passive: 'is defined as'.",
+          "concepts": ["definitions", "passive_voice"]
+        }
+      ]
+    },
+
+    {
+      "id": "6.2",
+      "topic": "Sound and waves",
+      "title": "Sound and musical instruments",
+      "intro": "Different instruments produce sound in different ways.",
+      "physics_target": "how instruments make sound",
+      "language_target": "passive voice present simple",
+      "tasks": [
+        {
+          "id": "6.2.1",
+          "type": "matching",
+          "difficulty": 1,
+          "prompt": "Match the instrument with its family:",
+          "left_items": ["guitar", "drum", "flute", "violin"],
+          "right_items": ["wind", "string", "percussion", "string"],
+          "correct_pairs": [[0,1],[1,2],[2,0],[3,3]],
+          "concepts": ["instruments"]
+        },
+        {
+          "id": "6.2.2",
+          "type": "classification",
+          "difficulty": 1,
+          "prompt": "Sort the instruments by family:",
+          "items": ["piano", "trumpet", "drum", "guitar", "flute", "xylophone"],
+          "categories": ["String", "Wind", "Percussion"],
+          "correct_mapping": {
+            "piano": "String",
+            "guitar": "String",
+            "trumpet": "Wind",
+            "flute": "Wind",
+            "drum": "Percussion",
+            "xylophone": "Percussion"
+          },
+          "concepts": ["instruments"]
+        },
+        {
+          "id": "6.2.3",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Sound ___ produced by vibrations. (passive 'be' + past participle)",
+          "correct_answers": ["is"],
+          "feedback_right": "Correct. 'Sound is produced'.",
+          "feedback_wrong": "Passive: subject + is/are + past participle.",
+          "concepts": ["passive_voice"]
+        },
+        {
+          "id": "6.2.4",
+          "type": "fill_blank",
+          "difficulty": 2,
+          "prompt_template": "Drums ___ played by hitting the surface. (passive)",
+          "correct_answers": ["are"],
+          "feedback_right": "Correct. Plural → 'are played'.",
+          "feedback_wrong": "Plural passive: 'are' + past participle.",
+          "concepts": ["passive_voice"]
+        },
+        {
+          "id": "6.2.5",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "Which sentence is correct passive present simple?",
+          "options": [
+            "A guitar is played by plucking its strings.",
+            "A guitar plays by plucking its strings.",
+            "A guitar plucked its strings by playing.",
+            "A guitar is plucking by player strings."
+          ],
+          "correct_index": 0,
+          "feedback_right": "Correct passive structure.",
+          "feedback_wrong": "Passive: [thing] is/are + past participle + by [agent].",
+          "concepts": ["passive_voice"]
+        },
+        {
+          "id": "6.2.6",
+          "type": "single_choice",
+          "difficulty": 3,
+          "prompt": "How do wind instruments produce sound?",
+          "options": [
+            "By vibrating strings",
+            "By hitting the surface",
+            "By vibrating a column of air inside",
+            "By using electricity"
+          ],
+          "correct_index": 2,
+          "feedback_right": "Correct. Air inside the tube vibrates and produces sound.",
+          "feedback_wrong": "Wind instruments = air column vibrates inside the tube.",
+          "concepts": ["instruments", "sound_production"]
+        }
+      ]
+    }
+  ]
+}

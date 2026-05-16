@@ -34,6 +34,7 @@ const TASK_TYPE_ICONS = {
   matching: '🔗',
   classification: '📊',
   ordering: '🔢',
+  graph_choice: '📈',
 };
 
 function summaryHeadline(accuracy, isReplay) {

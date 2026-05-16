@@ -1,12 +1,12 @@
-"""Seed loader for tasks_v1.json. Idempotent: upserts lessons + tasks by their
+"""Seed loader for tasks_vN.json. Idempotent: upserts lessons + tasks by their
 JSON `id` (which we store as `external_id`). Two default groups are also
 ensured.
 
-Locations searched, in order:
-  1. $TASKS_JSON_PATH
-  2. /tasks_v1.json (Docker bind path)
-  3. <backend>/tasks_v1.json (shipped inside the backend image — Railway path)
-  4. <backend>/../tasks_v1.json (local dev with project-root tasks file)
+We prefer the highest-versioned tasks file we find. Search order, in:
+  1. $TASKS_JSON_PATH (overrides everything)
+  2. /tasks_v2.json, /tasks_v1.json (Docker bind paths)
+  3. <backend>/tasks_v2.json, <backend>/tasks_v1.json (shipped in image)
+  4. <backend>/../tasks_v2.json, <backend>/../tasks_v1.json (local dev)
 """
 from __future__ import annotations
 
@@ -33,19 +33,26 @@ _DEFAULT_GROUPS = [
 _TASK_COLUMN_FIELDS = {"id", "type", "difficulty"}
 
 
+_VERSIONS = ("v2", "v1")
+
+
 def _locate_tasks_json() -> Optional[Path]:
     env_path = os.getenv("TASKS_JSON_PATH")
-    candidates = []
     if env_path:
-        candidates.append(Path(env_path))
-    candidates.append(Path("/tasks_v1.json"))
-    # backend/app/database/seed.py → backend/ = shipped seed inside image
-    candidates.append(Path(__file__).resolve().parent.parent.parent / "tasks_v1.json")
-    # backend/app/database/seed.py → backend/.. = project root (local dev)
-    candidates.append(Path(__file__).resolve().parent.parent.parent.parent / "tasks_v1.json")
-    for p in candidates:
+        p = Path(env_path)
         if p.is_file():
             return p
+
+    backend_dir = Path(__file__).resolve().parent.parent.parent  # → backend/
+    project_root = backend_dir.parent  # → repo root
+    for v in _VERSIONS:
+        for p in (
+            Path(f"/tasks_{v}.json"),
+            backend_dir / f"tasks_{v}.json",
+            project_root / f"tasks_{v}.json",
+        ):
+            if p.is_file():
+                return p
     return None
 
 

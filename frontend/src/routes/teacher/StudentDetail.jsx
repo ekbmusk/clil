@@ -13,6 +13,7 @@ const TYPE_ICON = {
   matching: '🔗',
   classification: '📊',
   ordering: '🔢',
+  graph_choice: '📈',
 };
 
 export default function StudentDetail() {

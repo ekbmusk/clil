@@ -3,6 +3,7 @@ import FillBlank from './FillBlank';
 import Matching from './Matching';
 import Classification from './Classification';
 import Ordering from './Ordering';
+import GraphChoice from './GraphChoice';
 
 const REGISTRY = {
   single_choice: SingleChoice,
@@ -10,6 +11,7 @@ const REGISTRY = {
   matching: Matching,
   classification: Classification,
   ordering: Ordering,
+  graph_choice: GraphChoice,
 };
 
 // Backend ships type-specific fields nested under `task.payload` (prompt,

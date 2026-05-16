@@ -99,6 +99,9 @@ def _grade_ordering(payload: dict, answer: dict) -> tuple[bool, Any]:
 
 _GRADERS = {
     "single_choice": _grade_single_choice,
+    # graph_choice = single_choice with an extra `image_url` field on the
+    # payload. Grading logic is identical; the renderer is what differs.
+    "graph_choice": _grade_single_choice,
     "fill_blank": _grade_fill_blank,
     "matching": _grade_matching,
     "classification": _grade_classification,

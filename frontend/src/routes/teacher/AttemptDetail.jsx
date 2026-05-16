@@ -9,11 +9,12 @@ const TYPE_LABEL = {
   matching: 'Matching',
   classification: 'Classification',
   ordering: 'Ordering',
+  graph_choice: 'Graph choice',
 };
 
 function StudentAnswer({ type, payload }) {
   if (!payload) return <p className="text-ink-muted">—</p>;
-  if (type === 'single_choice') {
+  if (type === 'single_choice' || type === 'graph_choice') {
     return (
       <p className="text-ink">
         Таңдалған индекс: <span className="font-mono">{payload.selected_index ?? '—'}</span>
