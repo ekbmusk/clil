@@ -6,31 +6,10 @@ import Card from '../../components/ui/Card';
 import Chip from '../../components/ui/Chip';
 import ProgressBar from '../../components/ui/ProgressBar';
 import Button from '../../components/ui/Button';
+import Avatar from '../../components/ui/Avatar';
 import { useUserStore } from '../../store/userStore';
 import { useLessonStore } from '../../store/lessonStore';
 import { mainButton, backButton } from '../../lib/telegram';
-
-function Avatar({ user }) {
-  const [failed, setFailed] = useState(false);
-  const initial = (user?.first_name || user?.username || '?').trim().charAt(0).toUpperCase();
-  const src = user?.id ? `/api/users/${user.id}/avatar` : null;
-
-  if (!src || failed) {
-    return (
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-3xl font-bold text-primary-soft">
-        {initial}
-      </div>
-    );
-  }
-  return (
-    <img
-      src={src}
-      alt={user?.first_name || 'avatar'}
-      onError={() => setFailed(true)}
-      className="h-20 w-20 rounded-full object-cover ring-2 ring-primary/30"
-    />
-  );
-}
 
 function StatTile({ icon, label, value, sub }) {
   return (
@@ -101,7 +80,7 @@ export default function Profile() {
   return (
     <div className="container-app space-y-4 py-4 pb-24">
       <Card className="flex items-center gap-4">
-        <Avatar user={user} />
+        <Avatar user={user} size="lg" />
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-xl font-bold text-ink">{displayName}</h1>
           {handle && <p className="truncate text-sm text-ink-muted">{handle}</p>}

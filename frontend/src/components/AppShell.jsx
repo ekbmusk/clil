@@ -1,32 +1,63 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { useUserStore } from '../store/userStore';
+import Avatar from './ui/Avatar';
 
 function Header() {
   const user = useUserStore((s) => s.user);
   const role = useUserStore((s) => s.role);
+  const navigate = useNavigate();
   const isTeacher = role === 'teacher';
+
+  const displayName =
+    [user?.first_name, user?.last_name].filter(Boolean).join(' ') ||
+    user?.username ||
+    (isTeacher ? 'Мұғалім' : 'Оқушы');
+
+  const goProfile = () => {
+    if (!isTeacher) navigate('/profile');
+  };
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur">
       <div className="container-app flex items-center justify-between py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 text-primary-soft">
-            ⚛
-          </div>
-          <div className="leading-tight">
-            <p className="text-sm font-bold text-ink">CLIL · Physics</p>
-            <p className="text-[10px] uppercase tracking-wider text-ink-muted">
-              {isTeacher ? 'Мұғалім' : 'Оқушы'}
+        <button
+          type="button"
+          onClick={goProfile}
+          disabled={isTeacher}
+          className={clsx(
+            'flex min-w-0 items-center gap-2 rounded-xl py-1 pr-2 text-left',
+            !isTeacher && 'hover:bg-surface-2/40 active:bg-surface-2/60',
+          )}
+          aria-label={isTeacher ? 'CLIL · Physics' : 'Профильге өту'}
+        >
+          {isTeacher ? (
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 text-primary-soft">
+              ⚛
+            </div>
+          ) : (
+            <Avatar user={user} size="sm" ring={false} />
+          )}
+          <div className="min-w-0 leading-tight">
+            <p className="truncate text-sm font-bold text-ink">
+              {isTeacher ? 'CLIL · Physics' : displayName}
+            </p>
+            <p className="truncate text-[10px] uppercase tracking-wider text-ink-muted">
+              {isTeacher ? 'Мұғалім' : user?.username ? `@${user.username}` : 'Оқушы'}
             </p>
           </div>
-        </div>
+        </button>
         {!isTeacher && user && (
-          <div className="flex items-center gap-1 rounded-full bg-surface-2 px-3 py-1 text-xs text-ink">
+          <button
+            type="button"
+            onClick={goProfile}
+            className="flex items-center gap-1 rounded-full bg-surface-2 px-3 py-1 text-xs text-ink hover:bg-surface-2/80 active:bg-surface-2/60"
+            aria-label="Стрик"
+          >
             <span>🔥</span>
             <span className="font-mono font-semibold">{user.streak_count ?? 0}</span>
-          </div>
+          </button>
         )}
       </div>
     </header>
